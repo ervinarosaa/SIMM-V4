@@ -14,12 +14,11 @@ return new class extends Migration
         Schema::create('presensi', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->dateTime('tanggal_presensi');
+            $table->string('keterangan_presensi');
             $table->string('latitude');
             $table->string('longitude');
             $table->uuid('id_peserta');
             $table->foreign('id_peserta')->references('id')->on('peserta')->onUpdate('cascade')->onDelete('cascade');
-            $table->uuid('id_keterangan');
-            $table->foreign('id_keterangan')->references('id')->on('keterangan_presensi')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

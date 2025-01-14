@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('dokumen', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('file');
+            $table->string('jenis_dokumen');
             $table->uuid('id_peserta');
             $table->foreign('id_peserta')->references('id')->on('peserta')->onUpdate('cascade')->onDelete('cascade');
-            $table->uuid('id_jenis');
-            $table->foreign('id_jenis')->references('id')->on('jenis_dokumen')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

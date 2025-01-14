@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('institusi', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nama_institusi');
-            $table->uuid('id_tingkat');
-            $table->foreign('id_tingkat')->references('id')->on('tingkat_pendidikan')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('tingkat_pendidikan');
             $table->timestamps();
         });
     }
