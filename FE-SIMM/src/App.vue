@@ -4,7 +4,7 @@
             <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
             <div class="drawer-content flex flex-col">
                 <!-- Navbar -->
-                <Navbar />
+                <Navbar v-if="!isLogin"/>
                 
                 <!-- Main content area with Sidebar -->
                 <div class="flex mt-16">
