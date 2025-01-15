@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Institusi;
-use App\Models\TingkatPendidikan;
 use App\Http\Requests\InstitusiRequest;
 
 class InstitusiController extends Controller
@@ -19,7 +18,7 @@ class InstitusiController extends Controller
      */
     public function index()
     {
-        $institusi = Institusi::with("list_peserta", "tingkat_pendidikan")->get();
+        $institusi = Institusi::with("list_peserta")->get();
 
         return response()->json([
             "message" => "Lihat semua institusi",
@@ -44,7 +43,7 @@ class InstitusiController extends Controller
      */
     public function show(string $id)
     {
-        $institusi = Institusi::with(["list_peserta.lokasi", "list_peserta.institusi", "list_peserta.status", "tingkat_pendidikan"])->find($id);
+        $institusi = Institusi::with(["list_peserta.lokasi", "list_peserta.institusi", "list_peserta.status"])->find($id);
 
         if(!$institusi){
             return response()->json([
@@ -60,7 +59,7 @@ class InstitusiController extends Controller
     
     public function institusiPesertaAktif($id)
     {
-        $Institusi = Institusi::with("list_peserta_aktif", "tingkat_pendidikan")->find($id);
+        $Institusi = Institusi::with("list_peserta_aktif")->find($id);
 
         return response()->json([
             "message" => "Lihat Institusi dengan peserta aktif",
@@ -70,8 +69,7 @@ class InstitusiController extends Controller
 
     public function universitas()
     {
-        $tingkat = TingkatPendidikan::where("nama_tingkat", "Perguruan Tinggi")->first();
-        $universitas = Institusi::with(["list_peserta_aktif", "tingkat_pendidikan"])->where("id_tingkat", $tingkat->id)->get();
+        $universitas = Institusi::with(["list_peserta_aktif"])->where("tingkat_pendidikan", "Perguruan Tinggi")->get();
         return response()->json([
             "message" => "Lihat semua universitas",
             "data" => $universitas
@@ -80,8 +78,7 @@ class InstitusiController extends Controller
 
     public function sekolah()
     {
-        $tingkat = TingkatPendidikan::where("nama_tingkat", "Sekolah Kejuruan")->first();
-        $sekolah = Institusi::with(["list_peserta_aktif", "tingkat_pendidikan"])->where("id_tingkat", $tingkat->id)->get();
+        $sekolah = Institusi::with(["list_peserta_aktif"])->where("tingkat_pendidikan", "Sekolah Kejuruan")->get();
         return response()->json([
             "message" => "Lihat semua sekolah",
             "data" => $sekolah

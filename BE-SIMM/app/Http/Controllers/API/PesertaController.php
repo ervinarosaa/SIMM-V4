@@ -8,7 +8,6 @@ use App\Models\Peserta;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Status;
-use App\Models\TingkatPendidikan;
 use App\Models\Nilai;
 use App\Models\Lokasi;
 use App\Models\Presensi;
@@ -41,7 +40,7 @@ class PesertaController extends Controller
     public function pesertaAktif()
     {
         $statusAktif = Status::where("nama_status", "Aktif")->first();
-        $peserta = Peserta::with("lokasi", "institusi.tingkat_pendidikan", "status")->where("id_status", $statusAktif->id)->get();
+        $peserta = Peserta::with("lokasi", "institusi", "status")->where("id_status", $statusAktif->id)->get();
         return response()->json([
             "message" => "Lihat semua peserta aktif",
             "data" => $peserta
@@ -50,10 +49,9 @@ class PesertaController extends Controller
 
     public function mahasiswa()
     {
-        $tingkat = TingkatPendidikan::where("nama_tingkat", "Perguruan Tinggi")->first();
-        $mahasiswa = Peserta::with(["lokasi", "institusi.tingkat_pendidikan", "status"])
-            ->whereHas('institusi', function ($query) use ($tingkat) {
-                $query->where("id_tingkat", $tingkat->id);
+        $mahasiswa = Peserta::with(["lokasi", "institusi", "status"])
+            ->whereHas('institusi', function ($query) {
+                $query->where("tingkat_pendidikan", "Perguruan Tinggi");
             })
             ->get();
         return response()->json([
@@ -64,10 +62,9 @@ class PesertaController extends Controller
 
     public function siswa()
     {
-        $tingkat = TingkatPendidikan::where("nama_tingkat", "Sekolah Kejuruan")->first();
-        $siswa = Peserta::with(["lokasi", "institusi.tingkat_pendidikan", "status"])
-            ->whereHas('institusi', function ($query) use ($tingkat) {
-                $query->where("id_tingkat", $tingkat->id);
+        $siswa = Peserta::with(["lokasi", "institusi", "status"])
+            ->whereHas('institusi', function ($query) {
+                $query->where("tingkat_pendidikan", "Sekolah Kejuruan");
             })
             ->get();
         return response()->json([
@@ -138,8 +135,8 @@ class PesertaController extends Controller
     public function show(string $id)
     {
         $peserta = Peserta::with([
-            "user", "lokasi", "status", "institusi.tingkat_pendidikan", "nilai",
-            "sertifikat", "logbook", "presensi.keterangan", "dokumen.jenis" 
+            "user", "lokasi", "status", "institusi", "nilai",
+            "sertifikat", "logbook", "presensi", "dokumen" 
         ])->find($id);
 
         if(!$peserta){

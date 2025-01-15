@@ -117,7 +117,7 @@
         </div>
         <hr style="width: 60%; margin: 0 auto;">
         <div class="details-peserta">
-            @if($peserta->institusi->tingkat_pendidikan->nama_tingkat === "Perguruan Tinggi")
+            @if($peserta->institusi->tingkat_pendidikan === "Perguruan Tinggi")
                 NIS : {{ $peserta->nomor_induk }},
                 Fakultas : {{ $peserta->fakultas }},
             @else

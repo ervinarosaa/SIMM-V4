@@ -59,9 +59,6 @@ Route::prefix('v1')->group(function () {
 
     Route::get("status", [OptionController::class, "getStatus"])->middleware('auth:api');
     Route::get("nilai", [OptionController::class, "getNilai"])->middleware('auth:api');
-    Route::get("jenis-dokumen", [OptionController::class, "getJenisDokumen"])->middleware('auth:api');
-    Route::get("keterangan", [OptionController::class, "getKeteranganPresensi"])->middleware('auth:api');
-    Route::get("tingkat-pendidikan", [OptionController::class, "getTingkatPendidikan"])->middleware('auth:api');
 
     Route::post("sendmail", [DokumenController::class, "sendMail"])->middleware('auth:api');
     Route::post('export-peserta-aktif', [ExportController::class, 'exportPesertaAktif'])->middleware('auth:api');

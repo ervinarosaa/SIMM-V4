@@ -18,9 +18,6 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             NilaiSeeder::class,
             StatusSeeder::class,
-            KeteranganPresensiSeeder::class,
-            JenisDokumenSeeder::class,
-            TingkatPendidikanSeeder::class,
         ]);
     }
 }

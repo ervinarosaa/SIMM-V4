@@ -23,7 +23,7 @@ class InstitusiRequest extends FormRequest
     {
         return [
             'nama_institusi' => 'required|max:255',
-            "id_tingkat" => "required|exists:tingkat_pendidikan,id",
+            'tingkat_pendidikan' => 'required',
         ];
     }
 
@@ -32,8 +32,7 @@ class InstitusiRequest extends FormRequest
         return[
             'nama_institusi.required' => 'Nama institusi harus diisi',
             'nama_institusi.max' => 'Nama institusi tidak boleh lebih dari 255 karakter',
-            "id_tingkat.required" => "Tingkat pendidikan harus diisi",
-            "id_tingkat.exists" => "Tingkat pendidikan tidak valid",
+            "tingkat_pendidikan.required" => "Tingkat pendidikan harus diisi",
         ];
     }
 }

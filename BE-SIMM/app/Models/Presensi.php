@@ -14,19 +14,14 @@ class Presensi extends Model
 
     protected $fillable = [
         "tanggal_presensi",
-        "latitude",
-        "longitude",
-        "id_keterangan",
+        "keterangan_presensi",
+        "latitude_presensi",
+        "longitude_presensi",
         "id_peserta",
     ];
 
     public function peserta()
     {
         return $this->belongsTo(Peserta::class, 'id_peserta');
-    }
-
-    public function keterangan()
-    {
-        return $this->belongsTo(KeteranganPresensi::class, "id_keterangan");
     }
 }

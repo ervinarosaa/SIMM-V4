@@ -6,11 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Peserta;
 use App\Models\Status;
-use App\Models\TingkatPendidikan;
 use App\Models\Institusi;
 use App\Models\Lokasi;
 use App\Models\Presensi;
-use App\Models\KeteranganPresensi;
 use App\Models\Logbook;
 use App\Models\Dokumen;
 
@@ -84,11 +82,8 @@ class DashboardController extends Controller
     public function distribusiTingkatPendidikan() 
     {
         try {
-            $tingkatPerguruanTinggi = TingkatPendidikan::where("nama_tingkat", "Perguruan Tinggi")->first();
-            $totalPerguruanTinggi = Institusi::where("id_tingkat", $tingkatPerguruanTinggi->id)->count();
-
-            $tingkatSekolahKejuruan = TingkatPendidikan::where("nama_tingkat", "Sekolah Kejuruan")->first();
-            $totalSekolahKejuruan= Institusi::where("id_tingkat", $tingkatSekolahKejuruan->id)->count();
+            $totalPerguruanTinggi = Institusi::where("tingkat_pendidikan", "Perguruan Tinggi")->count();
+            $totalSekolahKejuruan= Institusi::where("tingkat_pendidikan", "Sekolah Kejuruan")->count();
             
             return response()->json([
                 "message" => "Berhasil menampilkan distribusi tingkat pendidikan!",
@@ -184,19 +179,16 @@ class DashboardController extends Controller
     public function presensiPeserta($id)
     {
         try {
-            $id_hadir = KeteranganPresensi::where("nama_keterangan", "Hadir")->value("id"); // Ambil ID keterangan "Hadir"
             $total_hadir = Presensi::where("id_peserta", $id)
-                ->where("id_keterangan", $id_hadir)
+                ->where("keterangan_presensi", "Hadir")
                 ->count();
 
-            $id_izin = KeteranganPresensi::where("nama_keterangan", "Izin")->value("id"); // Ambil ID keterangan "Hadir"
             $total_izin = Presensi::where("id_peserta", $id)
-                ->where("id_keterangan", $id_izin)
+                ->where("keterangan_presensi", "Izin")
                 ->count();
 
-            $id_sakit = KeteranganPresensi::where("nama_keterangan", "Sakit")->value("id"); // Ambil ID keterangan "Hadir"
             $total_sakit = Presensi::where("id_peserta", $id)
-                ->where("id_keterangan", $id_sakit)
+                ->where("keterangan_presensi", "Sakit")
                 ->count();
 
             return response()->json([

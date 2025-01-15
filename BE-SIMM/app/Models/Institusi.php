@@ -15,7 +15,7 @@ class Institusi extends Model
 
     protected $fillable = [
         "nama_institusi",
-        "id_tingkat"
+        "tingkat_pendidikan"
     ];
 
     public function list_peserta()

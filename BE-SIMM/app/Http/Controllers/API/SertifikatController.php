@@ -76,7 +76,6 @@ class SertifikatController extends Controller
         $peserta = Peserta::with([
             "lokasi",
             "institusi",
-            "institusi.tingkat_pendidikan",
             "nilai",
             "sertifikat",
         ])->find($id);

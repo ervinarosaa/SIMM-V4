@@ -15,6 +15,9 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('nama_lokasi');
             $table->text('alamat_lokasi');
+            $table->text('maps_url');
+            $table->text('latitude_lokasi');
+            $table->text('longitude_lokasi');
             $table->integer('kuota_magang');
             $table->integer('kuota_terisi');
             $table->timestamps();

@@ -23,7 +23,7 @@ class DokumenRequest extends FormRequest
     {
         return [
             "file" => "required",
-            "id_jenis" => "required|exists:jenis_dokumen,id",
+            "jenis_dokumen" => "required",
             "id_peserta" => "required|uuid",
         ];
     }
@@ -32,8 +32,7 @@ class DokumenRequest extends FormRequest
     {
         return[
             "file.required" => "Dokumen harus diisi",
-            "id_jenis.required" => "Jenis dokumen harus diisi",
-            "id_jenis.exists" => "Jenis dokumen tidak valid",
+            "jenis_dokumen.required" => "Jenis dokumen harus diisi",
             "id_peserta.required" => "ID peserta harus diisi",
             "id_peserta.uuid" => "ID peserta harus dalam format UUID yang valid",
         ];

@@ -24,6 +24,9 @@ class LokasiRequest extends FormRequest
         return [
             'nama_lokasi' => 'required|max:255',
             'alamat_lokasi' => 'required',
+            'maps_url' => 'required',
+            'latitude_lokasi' => 'required',
+            'longitude_lokasi' => 'required',
             'kuota_magang' => 'required|integer',
             'kuota_terisi' => 'required|integer',
         ];
@@ -35,6 +38,9 @@ class LokasiRequest extends FormRequest
             'nama_lokasi.required' => 'Nama lokasi harus diisi',
             'nama_lokasi.max' => 'Nama lokasi tidak boleh lebih dari 255 karakter',
             'alamat_lokasi.required' => 'Alamat lokasi harus diisi',
+            'maps_url.required' => 'Maps URL lokasi harus diisi',
+            'latitude_lokasi.required' => 'Latitude lokasi harus diisi',
+            'longitude_lokasi.required' => 'Longitude lokasi harus diisi',
             'kuota_magang.required' => 'Kuota magang harus diisi',
             'kuota_magang.integer' => 'Kuota magang harus berupa angka',
             'kuota_terisi.required' => 'Kuota terisi harus diisi',

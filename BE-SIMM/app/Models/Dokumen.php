@@ -14,17 +14,12 @@ class Dokumen extends Model
 
     protected $fillable = [
         'file',
-        'id_jenis',
+        'jenis_dokumen',
         'id_peserta',
     ];
 
     public function peserta()
     {
         return $this->belongsTo(Peserta::class, 'id_peserta');
-    }
-
-    public function jenis()
-    {
-        return $this->belongsTo(JenisDokumen::class, 'id_jenis');
     }
 }

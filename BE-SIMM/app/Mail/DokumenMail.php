@@ -11,7 +11,6 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\User;
 use App\Models\Peserta;
 use App\Models\Dokumen;
-use App\Models\JenisDokumen;
 use Illuminate\Mail\Mailables\Address;
 
 class DokumenMail extends Mailable
@@ -20,16 +19,14 @@ class DokumenMail extends Mailable
 
     public $peserta;
     public $dokumen;
-    public $jenisDokumen;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(Peserta $peserta, Dokumen $dokumen, JenisDokumen $jenisDokumen)
+    public function __construct(Peserta $peserta, Dokumen $dokumen)
     {
         $this->peserta = $peserta;
         $this->dokumen = $dokumen;
-        $this->jenisDokumen = $jenisDokumen;
     }
 
     /**
@@ -55,7 +52,7 @@ class DokumenMail extends Mailable
                 'nomor_induk' => $this->peserta->nomor_induk,
                 'nama_institusi' => $this->peserta->institusi->nama_institusi,
                 'jurusan' => $this->peserta->jurusan,
-                'nama_jenis' => $this->jenisDokumen->nama_jenis,
+                'nama_jenis' => $this->dokumen->jenis_dokumen,
             ]
         );
     }

@@ -15,6 +15,9 @@ class Lokasi extends Model
     protected $fillable = [
         "nama_lokasi",
         "alamat_lokasi",
+        "maps_url",
+        "latitude_lokasi",
+        "longitude_lokasi",
         "kuota_magang",
         "kuota_terisi",
     ];

@@ -23,9 +23,9 @@ class PresensiRequest extends FormRequest
     {
         return [
             "tanggal_presensi" => "required|date",
-            "latitude" => "required",
-            "longitude" => "required",
-            "id_keterangan" => "required|exists:keterangan_presensi,id",
+            "keterangan_presensi" => "required",
+            "latitude_presensi" => "required",
+            "longitude_presensi" => "required",
             "id_peserta" => "required|uuid",
         ];
     }
@@ -34,10 +34,9 @@ class PresensiRequest extends FormRequest
     {
         return[
             "tanggal_presensi.required" => "Tanggal presensi harus diisi",
-            "latitude.required" => "Judul presensi harus diisi",
-            "longitude.required" => "Deskripsi presensi harus diisi",
-            "id_keterangan.required" => "Keterangan presensi harus diisi",
-            "id_keterangan.exists" => "Keterangan presensi tidak valid",
+            "latitude_presensi.required" => "Latitude presensi harus diisi",
+            "longitude_presensi.required" => "Longitude presensi harus diisi",
+            "keterangan_presensi.required" => "Keterangan presensi harus diisi",
             "id_peserta.required" => "ID peserta harus diisi",
             "id_peserta.uuid" => "ID peserta harus dalam format UUID yang valid",
         ];

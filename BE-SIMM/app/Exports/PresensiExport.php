@@ -27,7 +27,7 @@ class PresensiExport implements FromCollection
     public function collection()
     {
         if ($this->id_peserta) {
-            $peserta = Peserta::with("institusi", "lokasi", "presensi.keterangan")->find($this->id_peserta);
+            $peserta = Peserta::with("institusi", "lokasi", "presensi")->find($this->id_peserta);
             
             $data = collect([ 
                 ["Presensi Magang"],
@@ -48,13 +48,13 @@ class PresensiExport implements FromCollection
 
             $presensi = $peserta->presensi
                 ->map(function ($presensi, $index) {
-                    $geolocationUrl = $presensi->latitude && $presensi->longitude 
-                        ? "https://www.google.com/maps?q={$presensi->latitude},{$presensi->longitude}"
+                    $geolocationUrl = $presensi->latitude_presensi && $presensi->longitude_presensi 
+                        ? "https://www.google.com/maps?q={$presensi->latitude_presensi},{$presensi->longitude_presensi}"
                         : "Tidak Tersedia";
                     return [
                         "No" => $index + 1,
                         "Tanggal" => $presensi->tanggal_presensi,
-                        "Keterangan" => $presensi->keterangan->nama_keterangan,
+                        "Keterangan" => $presensi->keterangan_presensi,
                         "Geolocation" => $geolocationUrl,
                     ];
                 });
@@ -81,8 +81,8 @@ class PresensiExport implements FromCollection
                 ])
                 ->get()
                 ->map(function ($presensi, $index) {
-                    $geolocationUrl = $presensi->latitude && $presensi->longitude 
-                        ? "https://www.google.com/maps?q={$presensi->latitude},{$presensi->longitude}"
+                    $geolocationUrl = $presensi->latitude_presensi && $presensi->longitude_presensi 
+                        ? "https://www.google.com/maps?q={$presensi->latitude_presensi},{$presensi->longitude_presensi}"
                         : "Tidak Tersedia";
                     return [
                         "No" => $index + 1,
@@ -91,7 +91,7 @@ class PresensiExport implements FromCollection
                         "NIS/NIM" => $presensi->peserta->nomor_induk,
                         "Institusi" => $presensi->peserta->institusi->nama_institusi ?? "N/A",
                         "Lokasi Magang" => $presensi->peserta->lokasi->nama_lokasi ?? "N/A",
-                        "Keterangan" => $presensi->keterangan->nama_keterangan,
+                        "Keterangan" => $presensi->keterangan_presensi,
                         "Geolocation" => $geolocationUrl,
                     ];
                 });

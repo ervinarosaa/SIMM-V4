@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\Dokumen;
 use App\Models\Peserta;
 use App\Models\User;
-use App\Models\JenisDokumen;
 use App\Http\Requests\DokumenRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
@@ -21,7 +20,7 @@ class DokumenController extends Controller
      */
     public function index()
     {
-        $dokumen = Dokumen::with("peserta", "jenis")->get();
+        $dokumen = Dokumen::with("peserta")->get();
 
         return response()->json([
             "message" => "Lihat semua Dokumen",
@@ -43,7 +42,7 @@ class DokumenController extends Controller
 
         $existingDokumen = Dokumen::where([
             "id_peserta" => $data["id_peserta"],
-            "id_jenis" => $data["id_jenis"],
+            "jenis_dokumen" => $data["jenis_dokumen"],
         ])->first();
 
         if ($request->hasFile("file")){
@@ -77,7 +76,7 @@ class DokumenController extends Controller
         Dokumen::updateOrCreate(
             [
                 "id_peserta" => $data["id_peserta"],
-                "id_jenis" => $data["id_jenis"],
+                "jenis_dokumen" => $data["jenis_dokumen"],
             ],
             $data
         );
@@ -94,16 +93,15 @@ class DokumenController extends Controller
         $dokumen = Dokumen::updateOrCreate(
             [
                 "id_peserta" => $data["id_peserta"],
-                "id_jenis" => $data["id_jenis"],
+                "jenis_dokumen" => $data["jenis_dokumen"],
             ],
             $data
         );
 
-        $jenisDokumen = JenisDokumen::findOrFail($request->id_jenis);
         $peserta = Peserta::find($dokumen->id_peserta);
         $user = User::where("id", $peserta->id_user)->first();
 
-        Mail::to($user->email)->send(new DokumenMail($peserta, $dokumen, $jenisDokumen));
+        Mail::to($user->email)->send(new DokumenMail($peserta, $dokumen));
 
         return response()->json([
             "message" => "Dokumen berhasil ditambahkan dan dikirim ke email peserta"
@@ -115,7 +113,7 @@ class DokumenController extends Controller
      */
     public function show(string $id)
     {
-        $dokumen = Dokumen::with(["peserta", "jenis"])->find($id);
+        $dokumen = Dokumen::with(["peserta"])->find($id);
 
         if(!$dokumen){
             return response()->json([
@@ -131,7 +129,7 @@ class DokumenController extends Controller
 
     public function DokumenByIdPeserta($id_peserta)
     {
-        $dokumen = Dokumen::with(["peserta", "jenis"])->where("id_peserta", $id_peserta)->get();
+        $dokumen = Dokumen::with(["peserta"])->where("id_peserta", $id_peserta)->get();
 
         if ($dokumen->isEmpty()) {
             return response()->json([
