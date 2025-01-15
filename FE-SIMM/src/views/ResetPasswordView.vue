@@ -15,8 +15,7 @@
                         <span class="text-red-500">*</span>
                     </label>
                     <label class="input input-bordered flex items-center h-[30px]">
-                        <input v-if="AuthStore.token" type="email" class="grow" v-model="email" required readonly />
-                        <input v-else type="email" class="grow" v-model="email" required />
+                        <input type="email" class="grow" v-model="email" required />
                     </label>
                 </div>
                 <input type="submit" value="Kirim OTP" class="btn bg-green-700 text-white btn-sm px-4">
@@ -67,7 +66,7 @@
 
 <script setup>
 import { useAuthStore } from '@/stores/AuthStore';
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { customAPI } from '@/api';
 import { useRouter } from 'vue-router';
 import SuccessAlert from '@/components/Alerts/SuccessAlert.vue';
@@ -90,19 +89,6 @@ const otp = ref("");
 const email = ref("");
 const new_password = ref("");
 const confirm_password = ref("");
-
-const getMe = async () => {
-    try {
-        const { data } = await customAPI.get('/me', {
-            headers: { Authorization: `Bearer ${AuthStore.token}`},
-        });
-
-        email.value = data.user.email;
-    } catch (error) {
-        isFailed.value = true;
-        failedMessage.value = 'Gagal mendapatkan data email';
-    }
-}
 
 const resetAlerts = () => {
     isSuccess.value = false;
@@ -162,10 +148,4 @@ const handleSubmit = async () => {
         }
     }
 };
-
-onMounted(() => {
-    if (AuthStore.token) {
-        getMe();
-    }
-});
 </script>

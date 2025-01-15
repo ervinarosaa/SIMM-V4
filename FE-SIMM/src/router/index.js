@@ -179,15 +179,6 @@ const router = createRouter({
             requiresAuth: true 
           },
         },
-        {
-          path: 'reset-password',
-          name: 'Reset Password',
-          component: ResetPasswordView,
-          meta: { 
-            rolesAllowed: ['Kepala Bagian', 'Peserta'], 
-            requiresAuth: true 
-          },
-        },
       ]
     },
     {

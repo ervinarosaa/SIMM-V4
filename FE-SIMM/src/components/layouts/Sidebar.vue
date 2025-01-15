@@ -238,14 +238,6 @@ const menu = [
         url: '/administrasi',
         peserta: true,
     },
-    {
-        id: 10,
-        name: 'Reset Password',
-        icon: 'pi pi-cog',
-        url: '/reset-password',
-        peserta: true,
-        kabag: true,
-    },
 ];
 
 const filterMenu = computed(() => {
