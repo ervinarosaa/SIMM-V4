@@ -192,8 +192,8 @@ import { customAPI } from '@/api';
 import profilDefault from '@/assets/profil-default.png';
 import DialogSendEmail from '@/components/Dialog/DialogSendEmail.vue';
 import DialogGeneralExport from '@/components/Dialog/DialogExportDataMagang.vue';
-import DialogSertifikat from '../Dialog/DialogSertifikat.vue';
-import Loading from '../Loading.vue';
+import DialogSertifikat from '@/views/Arsip Data Magang/DialogSertifikat.vue';
+import Loading from '@/components/layouts/Loading.vue';
 import SuccessAlert from '@/components/Alerts/SuccessAlert.vue';
 
 // State untuk mengontrol alert

@@ -72,7 +72,7 @@
 
                                 <!-- Tombol Edit -->
                                 <div class="tooltip tooltip-bottom" data-tip="Edit">
-                                    <button class="btn btn-sm btn-warning text-white" @click="triggerUpload(dokumen.jenis.nama_jenis)">
+                                    <button class="btn btn-sm btn-warning text-white" @click="triggerUpload(dokumen.jenis_dokumen)">
                                         <span class="pi pi-pencil"></span>
                                     </button>
                                 </div>
@@ -118,7 +118,7 @@
 
                                 <!-- Tombol Edit -->
                                 <div class="tooltip tooltip-bottom" data-tip="Edit">
-                                    <button class="btn btn-sm btn-warning text-white" @click="triggerUpload(dokumen.jenis.nama_jenis)">
+                                    <button class="btn btn-sm btn-warning text-white" @click="triggerUpload(dokumen.jenis_dokumen)">
                                         <span class="pi pi-pencil"></span>
                                     </button>
                                 </div>
@@ -171,8 +171,8 @@
 import { onMounted, ref } from 'vue';
 import { customAPI } from '@/api';
 import { useAuthStore } from '@/stores/AuthStore';
-import Loading from '@/components/Loading.vue';
-import DialogAdministrasi from '@/components/Dialog/DialogAdministrasi.vue';
+import Loading from '@/components/layouts/Loading.vue';
+import DialogAdministrasi from '@/views/Administrasi/DialogAdministrasi.vue';
 import DeleteConfirm from '@/components/Alerts/DeleteConfirm.vue'; 
 import SuccessAlert from '@/components/Alerts/SuccessAlert.vue';
 import FailedAlert from '@/components/Alerts/FailedAlert.vue';
@@ -188,10 +188,9 @@ const failedMessage = ref('');
 const AuthStore = useAuthStore();
 const loading = ref(false);
 const allDokumen = ref([]);
-const AllJenisDokumen = ref([]);
 const fileInput = ref(null);
 const id_peserta = ref(null);
-const jenisIdTerpilih = ref(null);
+const jenis_dokumen = ref(null);
 
 const FetchDokumen = async () => {
     try {
@@ -205,27 +204,11 @@ const FetchDokumen = async () => {
 };
 
 const filterDokumen = (jenis) => {
-    return allDokumen.value.filter(dokumen => dokumen.jenis && dokumen.jenis.nama_jenis === jenis);
-};
-
-const FetchJenisDokumen = async () => {
-    try {
-        const { data } = await customAPI.get('/jenis-dokumen', {
-            headers: { Authorization: `Bearer ${AuthStore.token}` },
-        });
-        AllJenisDokumen.value = data.data;
-    } catch (error) {
-        console.log('Failed to fetch jenis dokumen:', error);
-    }
-};
-
-const filterJenisDokumen = (jenis) => {
-    const filtered = AllJenisDokumen.value.find(item => item.nama_jenis === jenis);
-    jenisIdTerpilih.value = filtered ? filtered.id : null;
+    return allDokumen.value.filter(dokumen => dokumen.jenis_dokumen === jenis);
 };
 
 const triggerUpload = (jenis) => {
-    filterJenisDokumen(jenis);
+    jenis_dokumen.value = jenis;
     fileInput.value.click();
 };
 
@@ -254,7 +237,7 @@ const handleFileUpload = async (event) => {
     try {
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("id_jenis", jenisIdTerpilih.value);
+        formData.append("jenis_dokumen", jenis_dokumen.value);
         formData.append("id_peserta", id_peserta.value);
 
         await customAPI.post('/dokumen', formData, {
@@ -305,7 +288,6 @@ const confirmDelete = async () => {
             isSuccess.value = true;
             successMessage.value = 'Dokumen berhasil dihapus!';
             await FetchDokumen();
-            await FetchJenisDokumen();
         } catch (error) {
             console.error("Terjadi kesalahan saat menghapus dokumen:", error);
             isFailed.value = true;
@@ -330,6 +312,5 @@ onMounted(async () => {
     }
     
     await FetchDokumen();
-    await FetchJenisDokumen();
 });
 </script>

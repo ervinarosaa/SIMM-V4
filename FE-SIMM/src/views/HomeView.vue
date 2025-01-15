@@ -114,8 +114,8 @@
 import { customAPI } from '@/api';
 import { useAuthStore } from '@/stores/AuthStore';
 import { ref, onMounted } from 'vue';
-import Loading from '@/components/Loading.vue';
-import DoughnutChart from '@/components/DoughnutChart.vue';
+import Loading from '@/components/layouts/Loading.vue';
+import DoughnutChart from '@/components/Dashboard/DoughnutChart.vue';
 
 const AuthStore = useAuthStore();
 const loading = ref(false);

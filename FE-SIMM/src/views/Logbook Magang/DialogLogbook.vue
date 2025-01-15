@@ -180,7 +180,7 @@ const handleSubmit = async () => {
     } catch (error) {
         console.error('Failed to save logbook:', error);
         isFailed.value = true;
-        failedMessage.value = 'Gagal menyimpan data. Silahkan coba lagi!';
+        failedMessage.value = error.response.data.message || 'Gagal menyimpan data. Silahkan coba lagi!';
     }
 };
 

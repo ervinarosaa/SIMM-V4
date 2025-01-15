@@ -20,11 +20,10 @@
                     Tingkat Pendidikan
                     <span class="text-red-500">*</span>
                 </label>
-                <select class="input input-bordered h-[30px]" v-model="institusiData.id_tingkat" required>
+                <select class="input input-bordered h-[30px]" v-model="institusiData.tingkat_pendidikan" required>
                     <option disabled value="">Pilih Tingkat Pendidikan</option>
-                    <option v-for="tingkat in allTingkat" :key="tingkat.id" :value="tingkat.id">
-                        {{ tingkat.nama_tingkat }}
-                    </option>
+                    <option value="Perguruan Tinggi">Perguruan Tinggi</option>
+                    <option value="Sekolah Kejuruan">Sekolah Kejuruan</option>
                 </select>
             </div>
             <div class="flex flex-row py-3 items-center justify-end gap-3">
@@ -40,7 +39,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, onMounted } from 'vue';
+import { ref, reactive, watch } from 'vue';
 import { customAPI } from '@/api';
 import { useAuthStore } from '@/stores/AuthStore';
 import SuccessAlert from '@/components/Alerts/SuccessAlert.vue';
@@ -48,7 +47,6 @@ import FailedAlert from '@/components/Alerts/FailedAlert.vue';
 
 const AuthStore = useAuthStore();
 const emit = defineEmits(["closeModal", "institusiSaved"]);
-const allTingkat = ref("");
 
 const props = defineProps({
     institusi: {
@@ -61,27 +59,16 @@ const props = defineProps({
     },
 });
 
-const FetchTingkat = async () => {
-    try {
-        const { data } = await customAPI.get('/tingkat-pendidikan', {
-            headers: { Authorization: `Bearer ${AuthStore.token}` },
-        });
-        allTingkat.value = data.data;
-    } catch (error) {
-        console.log('Failed to fetch nilai:', error);
-    }
-};
-
 // reactive
 const institusiData = reactive({
     nama_institusi: props.institusi?.nama_institusi || '',
-    id_tingkat: props.institusi?.tingkat_pendidikan?.id || '',
+    tingkat_pendidikan: props.institusi?.tingkat_pendidikan|| '',
 });
 
 watch(() => props.institusi, (newInstitusi) => {
     if (newInstitusi) {
         institusiData.nama_institusi = newInstitusi.nama_institusi;
-        institusiData.id_tingkat = newInstitusi.tingkat_pendidikan?.id;
+        institusiData.tingkat_pendidikan = newInstitusi.tingkat_pendidikan;
     }
 });
 
@@ -91,7 +78,7 @@ const capitalizeWords = (text) => {
 
 const resetForm = () => {
     institusiData.nama_institusi = "";
-    institusiData.id_tingkat = ""
+    institusiData.tingkat_pendidikan = ""
 };
 
 // State untuk mengontrol alert
@@ -104,7 +91,7 @@ const handleSubmit = async () => {
     try {
         const formData = new FormData();
         formData.append("nama_institusi", capitalizeWords(institusiData.nama_institusi));
-        formData.append("id_tingkat", institusiData.id_tingkat);
+        formData.append("tingkat_pendidikan", institusiData.tingkat_pendidikan);
 
         if (props.editMode) {
             await customAPI.post(`/institusi/${props.institusi.id}?_method=PUT`, formData, {
@@ -129,7 +116,7 @@ const handleSubmit = async () => {
     } catch (error) {
         console.error('Failed to save institusi:', error);
         isFailed.value = true;
-        failedMessage.value = 'Gagal menyimpan data. Silahkan coba lagi!';
+        failedMessage.value = error.response.data.message || 'Gagal menyimpan data. Silahkan coba lagi!';
     }
 };
 
@@ -137,8 +124,4 @@ const handleClose = () => {
     resetForm();
     emit('closeModal');
 }
-
-onMounted(() => {
-    FetchTingkat();
-})
 </script>

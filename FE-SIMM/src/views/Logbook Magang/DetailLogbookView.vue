@@ -86,7 +86,7 @@ import { useAuthStore } from '@/stores/AuthStore';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import Breadcrumbs from '@/components/layouts/Breadcrumbs.vue';
-import Loading from '@/components/Loading.vue';
+import Loading from '@/components/layouts/Loading.vue';
 
 const AuthStore = useAuthStore();
 const route = useRoute();

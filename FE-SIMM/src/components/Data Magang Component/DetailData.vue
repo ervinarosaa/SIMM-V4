@@ -233,7 +233,7 @@
                         <div v-for="dokumen in detailDokumen" :key="dokumen.id">
                             <div class="card bg-base-200 border border-slate-300 shadow-lg mt-4 p-4">
                                 <div class="flex flex-col gap-2 items-center">
-                                    <p class="text-lg font-bold">{{ dokumen.jenis.nama_jenis }}</p>
+                                    <p class="text-lg font-bold">{{ dokumen.jenis_dokumen }}</p>
                                     <a :href="dokumen.file" target="_blank" rel="noopener noreferrer" 
                                         class="btn btn-sm btn-primary text-white px-5"> 
                                         View
@@ -256,7 +256,7 @@ import { useAuthStore } from '@/stores/AuthStore';
 import { format } from 'date-fns';
 import Breadcrumbs from '@/components/layouts/Breadcrumbs.vue';
 import profilDefault from '@/assets/profil-default.png';
-import Loading from '../Loading.vue';
+import Loading from '@/components/layouts/Loading.vue';
 
 const AuthStore = useAuthStore();
 const route = useRoute();

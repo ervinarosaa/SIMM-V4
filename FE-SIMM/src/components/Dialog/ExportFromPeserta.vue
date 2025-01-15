@@ -125,7 +125,7 @@ const handleSubmit = async () => {
     } catch (error) {
         console.error('Failed to export data:', error);
         isFailed.value = true;
-        failedMessage.value = 'Gagal mengekspor data. Silahkan coba lagi!';
+        failedMessage.value = error.response.data.message || 'Gagal mengekspor data. Silahkan coba lagi!';
     }
 };
 

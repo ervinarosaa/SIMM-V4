@@ -27,7 +27,7 @@ const fetchPesertaById = async () => {
 
         if (response.data.data) {
             peserta.value = response.data.data;
-            tingkatpendidikan.value = peserta.value.institusi.tingkat_pendidikan.nama_tingkat;
+            tingkatpendidikan.value = peserta.value.institusi.tingkat_pendidikan;
         } 
     } catch (error) {
         console.log("Failed to fetch peserta by ID", error);

@@ -97,9 +97,9 @@
 import { customAPI } from '@/api';
 import { useAuthStore } from '@/stores/AuthStore';
 import { ref, onMounted } from 'vue';
-import Loading from '@/components/Loading.vue';
-import BarChart from '@/components/BarChart.vue';
-import DoughnutChart from '@/components/DoughnutChart.vue';
+import Loading from '@/components/layouts/Loading.vue';
+import BarChart from '@/components/Dashboard/BarChart.vue';
+import DoughnutChart from '@/components/Dashboard/DoughnutChart.vue';
 
 const AuthStore = useAuthStore();
 const loadingScorecard = ref(false);

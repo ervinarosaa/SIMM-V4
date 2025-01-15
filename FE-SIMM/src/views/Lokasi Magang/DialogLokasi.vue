@@ -15,13 +15,44 @@
                 </label>
             </div>
 
-            <div class="flex flex-col gap-1">
+            <div class="flex flex-col gap-1 my-2">
                 <label for="Alamat" class="text-sm font-bold">
                     Alamat
                     <span class="text-red-500">*</span>
                 </label>
                 <label class="textarea textarea-bordered flex items-center">
                     <textarea class="grow" v-model="lokasiData.alamat_lokasi" required></textarea>
+                </label>
+            </div>
+            
+            <div class="flex flex-col gap-1 my-2">
+                <label for="URL Maps" class="text-sm font-bold">
+                    URL Maps
+                    <span class="text-red-500">*</span>
+                </label>
+                <label class="input input-bordered flex items-center h-[30px]">
+                    <input 
+                        type="text" 
+                        class="grow" 
+                        v-model="lokasiData.maps_url" 
+                        placeholder="Masukkan URL Google Maps"
+                        @input="extractLatLngFromUrl" 
+                        required
+                    />
+                </label>
+            </div>
+
+            <div class="flex flex-col gap-1 my-2">
+                <label for="Latitude" class="text-sm font-bold">Latitude</label>
+                <label class="input input-bordered flex items-center h-[30px]">
+                    <input class="grow" v-model="lokasiData.latitude_lokasi" readonly />
+                </label>
+            </div>
+            
+            <div class="flex flex-col gap-1 my-2">
+                <label for="Longitude" class="text-sm font-bold">Longitude</label>
+                <label class="input input-bordered flex items-center h-[30px]">
+                    <input class="grow" v-model="lokasiData.longitude_lokasi" readonly />
                 </label>
             </div>
 
@@ -82,6 +113,9 @@ const props = defineProps({
 const lokasiData = reactive({
     nama_lokasi: props.lokasi?.nama_lokasi || '',
     alamat_lokasi: props.lokasi?.alamat_lokasi || '',
+    maps_url: props.lokasi?.maps_url || '',
+    latitude_lokasi: props.lokasi?.latitude_lokasi || '',
+    longitude_lokasi: props.lokasi?.longitude_lokasi || '',
     kuota_magang: props.lokasi?.kuota_magang || '',
     kuota_terisi: props.lokasi?.kuota_terisi || '',
 });
@@ -90,19 +124,34 @@ watch(() => props.lokasi, (newLokasi) => {
     if (newLokasi) {
         lokasiData.nama_lokasi = newLokasi.nama_lokasi;
         lokasiData.alamat_lokasi = newLokasi.alamat_lokasi;
+        lokasiData.maps_url = newLokasi.maps_url;
+        lokasiData.latitude_lokasi = newLokasi.latitude_lokasi;
+        lokasiData.longitude_lokasi = newLokasi.longitude_lokasi;
         lokasiData.kuota_magang = newLokasi.kuota_magang;
         lokasiData.kuota_terisi = newLokasi.kuota_terisi;
     }
 });
 
-const capitalizeWords = (text) => {
-    return text.replace(/\b\w/g, char => char.toUpperCase());
+const extractLatLngFromUrl = () => {
+    const url = lokasiData.maps_url;
+    const regex = /@(-?\d+\.\d+),(-?\d+\.\d+)/;
+    const match = url.match(regex);
+    if (match) {
+        lokasiData.latitude_lokasi = match[1];
+        lokasiData.longitude_lokasi = match[2];
+    } else {
+        lokasiData.latitude_lokasi = '';
+        lokasiData.longitude_lokasi = '';
+    }
 };
 
 const resetForm = () => {
     lokasiData.nama_lokasi = "";
-    lokasiData.alamat_lokasi = ""
-    lokasiData.kuota_magang = ""
+    lokasiData.alamat_lokasi = "";
+    lokasiData.maps_url = "";
+    lokasiData.latitude_lokasi = "";
+    lokasiData.longitude_lokasi = "";
+    lokasiData.kuota_magang = "";
 };
 
 // State untuk mengontrol alert
@@ -114,8 +163,11 @@ const failedMessage = ref('');
 const handleSubmit = async () => {
     try {
         const formData = new FormData();
-        formData.append("nama_lokasi", capitalizeWords(lokasiData.nama_lokasi));
+        formData.append("nama_lokasi", lokasiData.nama_lokasi);
         formData.append("alamat_lokasi", lokasiData.alamat_lokasi);
+        formData.append("maps_url", lokasiData.maps_url);
+        formData.append("latitude_lokasi", lokasiData.latitude_lokasi);
+        formData.append("longitude_lokasi", lokasiData.longitude_lokasi);
         formData.append("kuota_magang", lokasiData.kuota_magang);
 
         if (props.editMode) {
@@ -143,12 +195,12 @@ const handleSubmit = async () => {
     } catch (error) {
         console.error('Failed to save lokasi:', error);
         isFailed.value = true;
-        failedMessage.value = 'Gagal menyimpan data. Silahkan coba lagi!';
+        failedMessage.value = error.response.data.message || 'Gagal menyimpan data. Silahkan coba lagi!';
     }
 };
 
 const handleClose = () => {
     resetForm();
     emit('closeModal');
-}
+};
 </script>

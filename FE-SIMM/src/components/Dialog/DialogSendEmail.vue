@@ -12,9 +12,8 @@
                 </label>
                 <select class="input input-bordered h-[30px]" v-model="jenis_dokumen" required>
                     <option disabled value="">Pilih Jenis Dokumen</option>
-                    <option v-for="jenis in AllJenisDokumen" :key="jenis.id" :value="jenis.id">
-                        {{ jenis.nama_jenis }}
-                    </option>
+                    <option value="Surat Balasan">Surat Balasan</option>
+                    <option value="Sertifikat">Sertifikat</option>
                 </select>
             </div>
             
@@ -39,27 +38,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { customAPI } from '@/api';
 import { useAuthStore } from '@/stores/AuthStore';
 import FailedAlert from '@/components/Alerts/FailedAlert.vue';
 
 const AuthStore = useAuthStore();
 const emit = defineEmits(["closeModal", "saved"]);
-const AllJenisDokumen = ref("");
-const jenis_dokumen = ref("");
 const unggah_dokumen = ref(null);
-
-const FetchJenisDokumen = async () => {
-    try {
-        const { data } = await customAPI.get('/jenis-dokumen', {
-            headers: { Authorization: `Bearer ${AuthStore.token}` },
-        });
-        AllJenisDokumen.value = data.data;
-    } catch (error) {
-        console.log('Failed to fetch jenis dokumen:', error);
-    }
-};
+const jenis_dokumen = ref("");
 
 const props = defineProps({
     peserta: {
@@ -83,10 +70,6 @@ const handleFileChange = (event) => {
     }
 };
 
-onMounted(() => {
-    FetchJenisDokumen();
-})
-
 const resetForm = () => {
     jenis_dokumen.value = "";
     unggah_dokumen.value = "";
@@ -105,7 +88,7 @@ const handleSubmit = async () => {
     try {
         const formData = new FormData();
         formData.append("file", unggah_dokumen.value);
-        formData.append("id_jenis", jenis_dokumen.value);
+        formData.append("jenis_dokumen", jenis_dokumen.value);
         formData.append("id_peserta", props.peserta.id);
 
         await customAPI.post('/sendmail', formData, {
@@ -120,7 +103,7 @@ const handleSubmit = async () => {
     } catch (error) {
         console.error('Failed to send documen:', error);
         isFailed.value = true;
-        failedMessage.value = 'Gagal menyimpan dan mengirim dokumen. Silahkan coba lagi!';
+        failedMessage.value = error.response.data.message || 'Gagal menyimpan dan mengirim dokumen. Silahkan coba lagi!';
     } 
 };
 

@@ -65,11 +65,11 @@
                         Keterangan
                         <span class="text-red-500">*</span>
                     </label>
-                    <select class="input input-bordered h-[30px]" v-model="id_keterangan" required v-if="AuthStore.user.role.nama_role === 'Admin'">
+                    <select class="input input-bordered h-[30px]" v-model="keterangan_presensi" required v-if="AuthStore.user.role.nama_role === 'Admin'">
                         <option disabled value="">Pilih Keterangan</option>
-                        <option v-for="keterangan in AllKeterangan" :key="keterangan.id" :value="keterangan.id">
-                            {{ keterangan.nama_keterangan }}
-                        </option>
+                        <option value="Hadir">Hadir</option>
+                        <option value="Izin">Izin</option>
+                        <option value="Sakit">Sakit</option>
                     </select>
                     <div v-else>
                         <label class="input input-bordered flex items-center h-[30px]">
@@ -110,11 +110,10 @@ const currentDate = ref(getLocalDateTime());
 
 let id_institusi = ref("");
 let id_peserta = ref("");
-let id_keterangan = ref("");
+let keterangan_presensi = ref("");
 let tanggal_presensi = AuthStore.user.role.nama_role === 'Admin' ? ref(null) : currentDate;
 const AllInstitusi = ref([]);
 const AllPeserta = ref([]);
-const AllKeterangan = ref("");
 
 const FetchInstitusi = async () => {
     try {
@@ -146,35 +145,20 @@ const FetchPeserta = async () => {
     }
 }
 
-const keteranganHadir = ref(null);
-const FetchKeterangan = async () => {
-    try {
-        const { data } = await customAPI.get('/keterangan', {
-            headers: { Authorization: `Bearer ${AuthStore.token}` }
-        });
-        AllKeterangan.value = data.data;
-
-        const ket_id = AllKeterangan.value.filter(keterangan => keterangan.nama_keterangan === "Hadir");
-        keteranganHadir.value = ket_id.map(keterangan => keterangan.id);
-    } catch (error) {
-        console.log('Error fetching data:', error);
-    }
-};
-
 watch(id_institusi, () => {
     id_peserta.value = "";
     FetchPeserta();
 });
 
-const latitude = ref(null);
-const longitude = ref(null);
+const latitude_presensi = ref(null);
+const longitude_presensi = ref(null);
 
 const getLocation = async () => {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                latitude.value = position.coords.latitude;
-                longitude.value = position.coords.longitude;
+                latitude_presensi.value = position.coords.latitude;
+                longitude_presensi.value = position.coords.longitude;
             },
             (error) => {
                 console.error('Error getting location:', error.message);
@@ -192,7 +176,7 @@ const getLocation = async () => {
 
 const resetForm = () => {
     id_institusi.value = "";
-    id_keterangan.value = "";
+    keterangan_presensi.value = "";
     if (AuthStore.user.role.nama_role === 'Admin') {
         tanggal_presensi.value = null;
     }
@@ -235,15 +219,15 @@ const handleSubmit = async () => {
 
         await getLocation();
 
-        if (!latitude.value || !longitude.value) {
+        if (!latitude_presensi.value || !longitude_presensi.value) {
             alert('Gagal mendapatkan lokasi, coba lagi!');
             return;
         }
 
         const formData = new FormData();
-        formData.append("latitude", latitude.value);
-        formData.append("longitude", longitude.value);
-        formData.append("id_keterangan", id_keterangan.value || keteranganHadir.value);
+        formData.append("latitude_presensi", latitude_presensi.value);
+        formData.append("longitude_presensi", longitude_presensi.value);
+        formData.append("keterangan_presensi", keterangan_presensi.value || "Hadir");
         formData.append("tanggal_presensi", tanggal_presensi.value);
 
         if (AuthStore.user.role.nama_role === 'Admin') {
@@ -267,7 +251,7 @@ const handleSubmit = async () => {
     } catch (error) {
         console.error('Terjadi kesalahan:', error);
         isFailed.value = true;
-        failedMessage.value = 'Gagal menyimpan data. Silahkan coba lagi!';
+        failedMessage.value = error.response.data.message || 'Gagal menyimpan data. Silahkan coba lagi!';
     }
 };
 
@@ -278,7 +262,6 @@ const handleClose = () => {
 
 onMounted(() => {
     FetchInstitusi();
-    FetchKeterangan();
     getLocation();
 });
 </script>

@@ -47,7 +47,7 @@
                             <tr v-for="(institusi, index) in filteredInstitusi" :key="institusi.id" class="text-center">
                                 <th>{{ index + 1 }}</th>
                                 <td class="text-lg">{{ institusi.nama_institusi }}</td>
-                                <td class="w-[150px] text-lg">{{ institusi.tingkat_pendidikan?.nama_tingkat }}</td>
+                                <td class="w-[150px] text-lg">{{ institusi.tingkat_pendidikan }}</td>
                                 <td>
                                     <div class="flex flex-row gap-2 justify-center items-center">
                                         <!-- View Detail Institusi -->
@@ -108,8 +108,8 @@
 import { ref, onMounted, computed } from 'vue';
 import { useAuthStore } from '@/stores/AuthStore';
 import { customAPI } from '@/api';
-import Loading from '@/components/Loading.vue';
-import DialogInstitusi from '@/components/Dialog/DialogInstitusi.vue';
+import Loading from '@/components/layouts/Loading.vue';
+import DialogInstitusi from '@/views/Institusi/DialogInstitusi.vue';
 import DeleteConfirm from '@/components/Alerts/DeleteConfirm.vue'; 
 import SuccessAlert from '@/components/Alerts/SuccessAlert.vue';
 import FailedAlert from '@/components/Alerts/FailedAlert.vue';
@@ -149,7 +149,7 @@ const filteredInstitusi = computed(() => {
     return allInstitusi.value.filter(institusi => {
         const matchesSearchQuery = searchQuery.value === "" ||
             institusi.nama_institusi.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-            institusi.tingkat_pendidikan?.nama_tingkat.toLowerCase().includes(searchQuery.value.toLowerCase());
+            institusi.tingkat_pendidikan.toLowerCase().includes(searchQuery.value.toLowerCase());
             return matchesSearchQuery;
     })
 });

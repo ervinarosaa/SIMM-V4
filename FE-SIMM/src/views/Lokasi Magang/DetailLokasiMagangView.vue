@@ -129,7 +129,7 @@ import { customAPI } from '@/api';
 import { useAuthStore } from '@/stores/AuthStore';
 import Breadcrumbs from '@/components/layouts/Breadcrumbs.vue';
 import profilDefault from '@/assets/profil-default.png';
-import Loading from '@/components/Loading.vue';
+import Loading from '@/components/layouts/Loading.vue';
 
 const AuthStore = useAuthStore();
 const route = useRoute();

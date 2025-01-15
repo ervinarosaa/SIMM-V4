@@ -130,9 +130,9 @@
 import { ref, computed, onMounted } from 'vue';
 import { useAuthStore } from '@/stores/AuthStore';
 import { customAPI } from '@/api';
-import Loading from '@/components/Loading.vue';
-import DialogLokasi from '@/components/Dialog/DialogLokasi.vue';
-import DialogKabag from '@/components/Dialog/DialogKabag.vue';
+import Loading from '@/components/layouts/Loading.vue';
+import DialogLokasi from '@/views/Lokasi Magang/DialogLokasi.vue';
+import DialogKabag from '@/views/Lokasi Magang/DialogKabag.vue';
 import DeleteConfirm from '@/components/Alerts/DeleteConfirm.vue'; 
 import SuccessAlert from '@/components/Alerts/SuccessAlert.vue';
 import FailedAlert from '@/components/Alerts/FailedAlert.vue';

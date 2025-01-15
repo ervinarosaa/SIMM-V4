@@ -3,7 +3,6 @@ import { useAuthStore } from '@/stores/AuthStore';
 import PublicLayout from '@/Layouts/PublicLayout.vue';
 import BerandaView from '@/views/BerandaView.vue';
 import LoginView from '@/views/LoginView.vue';
-import LandingView from '@/views/LandingView.vue';
 import DataMagangView from '@/views/Data Magang/DataMagangView.vue';
 import DetailDataMagangView from '@/views/Data Magang/DetailDataMagangView.vue';
 import AddDataMagangView from '@/views/Data Magang/AddDataMagangView.vue';

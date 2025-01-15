@@ -77,7 +77,7 @@
                                 <td class="w-[150px] text-sm">
                                     <div class="flex flex-col">
                                         <p>{{ formatTimestap(presensi.tanggal_presensi) }}</p>
-                                        <p>[{{ presensi.keterangan.nama_keterangan }}]</p>
+                                        <p>[{{ presensi.keterangan_presensi }}]</p>
                                     </div>
                                 </td>
                                 <td class="lg:w-[400px] text-sm">
@@ -90,8 +90,8 @@
                                 <td class="text-sm min-w-[200px]">
                                     <div class="flex justify-center">
                                         <iframe 
-                                            v-if="presensi.latitude && presensi.longitude" 
-                                            :src="`https://www.google.com/maps?q=${presensi.latitude},${presensi.longitude}&hl=es;z=14&output=embed`" 
+                                            v-if="presensi.latitude_presensi && presensi.longitude_presensi" 
+                                            :src="`https://www.google.com/maps?q=${presensi.latitude_presensi},${presensi.longitude_presensi}&hl=es;z=14&output=embed`" 
                                             width="80%" 
                                             height="175" 
                                             style="border:0;" 
@@ -158,10 +158,10 @@ import { useAuthStore } from '@/stores/AuthStore';
 import { customAPI } from '@/api';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
-import Loading from '@/components/Loading.vue';
+import Loading from '@/components/layouts/Loading.vue';
 import DialogEksporPresensi from '@/components/Dialog/DialogEksporByKategori.vue';
-import DialogTambahPresensi from '@/components/Dialog/DialogPresensi.vue';
-import ExportFromPeserta from '@/components/ExportFromPeserta.vue';
+import DialogTambahPresensi from '@/views/Presensi Magang/DialogPresensi.vue';
+import ExportFromPeserta from '@/components/Dialog/ExportFromPeserta.vue';
 import DeleteConfirm from '@/components/Alerts/DeleteConfirm.vue'; 
 import SuccessAlert from '@/components/Alerts/SuccessAlert.vue';
 import FailedAlert from '@/components/Alerts/FailedAlert.vue';
@@ -222,7 +222,7 @@ const filteredPresensi = computed(() => {
             presensi.peserta.nama_peserta.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
             presensi.peserta.institusi.nama_institusi.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
             presensi.peserta.lokasi.nama_lokasi.toLowerCase().includes(searchQuery.value.toLowerCase())||
-            presensi.keterangan.nama_keterangan.toLowerCase().includes(searchQuery.value.toLowerCase());
+            presensi.keterangan_presensi.toLowerCase().includes(searchQuery.value.toLowerCase());
 
         // Filter berdasarkan tanggal
         const matchesDate = !selectedDate.value ||

@@ -138,7 +138,7 @@ import { onMounted, ref, computed } from 'vue';
 import { RouterLink } from 'vue-router';
 import { customAPI } from '@/api';
 import { useAuthStore } from '@/stores/AuthStore';
-import Loading from '../Loading.vue';
+import Loading from '@/components/layouts/Loading.vue';
 import profilDefault from '@/assets/profil-default.png';
 
 const AuthStore = useAuthStore();
