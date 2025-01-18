@@ -57,7 +57,7 @@
                 <div v-else class="my-4" v-for="peserta in allPeserta" :key="peserta.id">
                     <div class="card bg-base-200 border border-slate-300 shadow-lg w-[340px] sm:w-auto md:w-[700px] lg:w-full overflow-x-auto"
                         @click="handleCardClick(peserta.id)">
-                        <div class="flex h-[200px] lg:h-[140px] items-center p-2">
+                        <div class="flex h-[200px] lg:h-[150px] items-center p-2">
                             <div class="w-24 aspect-[3/4] rounded-xl overflow-hidden shrink-0">
                                 <img v-if="peserta.foto_profil != null" :src="peserta.foto_profil" class="rounded-xl w-full h-full object-cover" />
                                 <img v-else :src="profilDefault" class="rounded-xl w-full h-full object-cover" />
@@ -70,22 +70,22 @@
                                     <table class="min-w-[600px]">
                                         <tbody>
                                             <tr>
-                                                <td class="font-semibold">Institusi Pendidikan</td>
+                                                <td class="font-semibold w-[160px]">Institusi Pendidikan</td>
                                                 <td>:</td>
                                                 <td>{{ peserta.institusi?.nama_institusi }}</td>
                                             </tr>
                                             <tr>
-                                                <td class="font-semibold">Lokasi Magang</td>
+                                                <td class="font-semibold w-[160px]">Lokasi Magang</td>
                                                 <td>:</td>
                                                 <td>{{ peserta.lokasi?.nama_lokasi }}</td>
                                             </tr>
                                             <tr>
-                                                <td class="font-semibold">Periode Magang</td>
+                                                <td class="font-semibold w-[160px]">Periode Magang</td>
                                                 <td>:</td>
                                                 <td>{{ peserta.tanggal_mulai }} s/d {{ peserta.tanggal_selesai }}</td>
                                             </tr>
                                             <tr>
-                                                <td class="font-semibold">Status</td>
+                                                <td class="font-semibold w-[160px]">Status</td>
                                                 <td>:</td>
                                                 <td>{{ peserta.status.nama_status }}</td>
                                             </tr>

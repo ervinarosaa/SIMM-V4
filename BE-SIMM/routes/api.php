@@ -45,8 +45,6 @@ Route::prefix('v1')->group(function () {
     Route::get('me', [AuthController::class, 'getUser'])->middleware('auth:api');
     Route::get("peserta-aktif", [PesertaController::class, "pesertaAktif"])->middleware('auth:api');
     Route::get("peserta-arsip", [PesertaController::class, "arsipPeserta"])->middleware('auth:api');
-    Route::get("mahasiswa", [PesertaController::class, "mahasiswa"])->middleware('auth:api');
-    Route::get("siswa", [PesertaController::class, "siswa"])->middleware('auth:api');
     Route::get("lokasi-option", [LokasiController::class, "getLokasiOption"])->middleware('auth:api');
     Route::get("institusi-aktif/{id}", [InstitusiController::class, "institusiPesertaAktif"])->middleware('auth:api');
     Route::get("universitas", [InstitusiController::class, "universitas"])->middleware('auth:api');

@@ -57,7 +57,7 @@
                 class="card bg-base-200 border border-slate-300 shadow-lg w-[340px] sm:w-auto md:w-[700px] lg:w-full overflow-x-auto"
                 @click="handleCardClick(peserta.id)"
             >
-                <div class="flex h-[200px] lg:h-[140px] items-center p-2">
+                <div class="flex h-[180px] lg:h-[140px] items-center p-2">
                     <div class="w-24 aspect-[3/4] rounded-xl overflow-hidden shrink-0">
                         <img v-if="peserta.foto_profil != null" :src="peserta.foto_profil" class="rounded-xl w-full h-full object-cover" />
                         <img v-else :src="profilDefault" class="rounded-xl w-full h-full object-cover" />
@@ -105,7 +105,9 @@
                                 </div>
                                 
                                 <div class="tooltip tooltip-bottom" data-tip="Cetak Sertifikat"  
-                                    v-if="props.arsipMode && peserta.status.nama_status !== 'Batal'">
+                                    v-if="props.arsipMode && peserta.status.nama_status !== 'Batal' 
+                                        && (peserta.dokumen.some(doc => doc.jenis_dokumen === 'Laporan Magang') &&
+                                        peserta.dokumen.some(doc => doc.jenis_dokumen === 'Lembar Penilaian'))">
                                     <!-- Cetak Sertifikat -->
                                     <button
                                         @click="openModalSertifikat(peserta)" 
@@ -141,17 +143,17 @@
                             <table class="min-w-[600px]">
                                 <tbody>
                                     <tr>
-                                        <td class="font-semibold">Institusi Pendidikan</td>
+                                        <td class="font-semibold w-[160px]">Institusi Pendidikan</td>
                                         <td>:</td>
                                         <td>{{ peserta.institusi?.nama_institusi }}</td>
                                     </tr>
                                     <tr>
-                                        <td class="font-semibold">Lokasi Magang</td>
+                                        <td class="font-semibold w-[160px]">Lokasi Magang</td>
                                         <td>:</td>
                                         <td>{{ peserta.lokasi?.nama_lokasi }}</td>
                                     </tr>
                                     <tr>
-                                        <td class="font-semibold">Periode Magang</td>
+                                        <td class="font-semibold w-[160px]">Periode Magang</td>
                                         <td>:</td>
                                         <td>{{ peserta.tanggal_mulai }} s/d {{ peserta.tanggal_selesai }}</td>
                                     </tr>
@@ -204,8 +206,6 @@ const AuthStore = useAuthStore();
 const router = useRouter();
 const loading = ref(false);
 const allPeserta = ref([]);
-const allMahasiswa = ref([]);
-const allSiswa = ref([]);
 const searchQuery = ref('');
 const selectedFilter = ref('');
 const filteredPeserta = ref([]);
@@ -248,19 +248,10 @@ const FetchPeserta = async () => {
 const applyFilter = async () => {
     let filteredData = allPeserta.value;
 
-    // Filter berdasarkan selectedFilter
     if (selectedFilter.value === 'Perguruan Tinggi') {
-        const { data } = await customAPI.get('/mahasiswa', {
-            headers: { Authorization: `Bearer ${AuthStore.token}` }
-        });
-        allMahasiswa.value = data.data; 
-        filteredData = allMahasiswa.value;
+        filteredData = filteredData.filter(p => p.institusi.tingkat_pendidikan === 'Perguruan Tinggi');
     } else if (selectedFilter.value === 'Sekolah Kejuruan') {
-        const { data } = await customAPI.get('/siswa', {
-            headers: { Authorization: `Bearer ${AuthStore.token}` }
-        });
-        allSiswa.value = data.data; 
-        filteredData = allSiswa.value;
+        filteredData = filteredData.filter(p => p.institusi.tingkat_pendidikan === 'Sekolah Kejuruan');
     }
 
     // Filter berdasarkan searchQuery

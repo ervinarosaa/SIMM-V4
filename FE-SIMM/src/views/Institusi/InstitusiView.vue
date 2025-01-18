@@ -32,8 +32,8 @@
             <Loading :all="true"/>
         </div>
         <div v-else class="my-4">
-            <div class="bg-base-200 py-2 px-2 max-w-full rounded-lg overflow-x-auto">
-                <div class="max-h-[800px] rounded-lg overflow-y-auto">
+            <div class="bg-base-100 py-2 px-2 max-w-full rounded-lg overflow-x-auto">
+                <div class="min-h-[300px] max-h-[800px] rounded-lg overflow-y-auto">
                     <table class="bg-base-100 table table-auto table-xs table-pin-rows">
                         <thead>
                             <tr class="text-center text-lg">

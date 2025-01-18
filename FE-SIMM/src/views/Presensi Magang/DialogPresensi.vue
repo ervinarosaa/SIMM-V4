@@ -225,18 +225,23 @@ const handleSubmit = async () => {
         }
 
         const formData = new FormData();
-        formData.append("latitude_presensi", latitude_presensi.value);
-        formData.append("longitude_presensi", longitude_presensi.value);
         formData.append("keterangan_presensi", keterangan_presensi.value || "Hadir");
         formData.append("tanggal_presensi", tanggal_presensi.value);
 
         if (AuthStore.user.role.nama_role === 'Admin') {
+            const { data } = await customAPI.get(`/peserta/${id_peserta.value}`, {
+                headers: { Authorization: `Bearer ${AuthStore.token}`},
+            });
             formData.append("id_peserta", id_peserta.value);
+            formData.append("latitude_presensi", data.data.lokasi.latitude_lokasi);
+            formData.append("longitude_presensi", data.data.lokasi.longitude_lokasi);
         } else {
             const { data } = await customAPI.get('/me', {
                 headers: { Authorization: `Bearer ${AuthStore.token}`},
             });
             formData.append("id_peserta", data.user.peserta.id);
+            formData.append("latitude_presensi", latitude_presensi.value);
+            formData.append("longitude_presensi", longitude_presensi.value);
         }
 
         await customAPI.post('/presensi', formData, {

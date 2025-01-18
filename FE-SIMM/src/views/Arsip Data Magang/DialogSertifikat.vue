@@ -34,7 +34,7 @@
                     <span class="text-red-500">*</span>
                 </label>
                 <label class="input input-bordered flex items-center h-[30px]">
-                    <input type="text" class="grow capitalize" v-model="sertifikatData.nama_penandatangan" required />
+                    <input type="text" class="grow capitalize" v-model="sertifikatData.nama_penandatangan" name="nama_penandatangan" @input="filterText" required />
                 </label>
             </div>
 
@@ -44,7 +44,7 @@
                     <span class="text-red-500">*</span>
                 </label>
                 <label class="input input-bordered flex items-center h-[30px]">
-                    <input type="text" class="grow capitalize" v-model="sertifikatData.nip_penandatangan" required />
+                    <input type="number" class="grow capitalize" v-model="sertifikatData.nip_penandatangan" required />
                 </label>
             </div>
 
@@ -54,7 +54,7 @@
                     <span class="text-red-500">*</span>
                 </label>
                 <label class="input input-bordered flex items-center h-[30px]">
-                    <input type="text" class="grow capitalize" v-model="sertifikatData.jabatan_penandatangan" required />
+                    <input type="text" class="grow capitalize" v-model="sertifikatData.jabatan_penandatangan" name="jabatan_penandatangan" @input="filterText" required />
                 </label>
             </div>
 
@@ -119,6 +119,13 @@ const sertifikatData = reactive({
     jabatan_penandatangan: props.peserta?.sertifikat?.jabatan_penandatangan || '',
     tanggal_penandatangan: props.peserta?.sertifikat?.tanggal_penandatangan || defaultDate,
 });
+
+const filterText = (event) => {
+    const fieldName = event.target.name;
+    if (sertifikatData[fieldName] !== undefined) {
+        sertifikatData[fieldName] = event.target.value.replace(/[0-9]/g, '');
+    }
+};
 
 watch(() => props.peserta, (newPeserta) => {
     if (newPeserta) {

@@ -11,7 +11,7 @@
                     <span class="text-red-500">*</span>
                 </label>
                 <label class="input input-bordered flex items-center h-[30px]">
-                    <input type="text" class="grow capitalize" v-model="lokasiData.nama_lokasi" required />
+                    <input type="text" class="grow capitalize" v-model="lokasiData.nama_lokasi" @input="filterText" required />
                 </label>
             </div>
 
@@ -143,6 +143,10 @@ const extractLatLngFromUrl = () => {
         lokasiData.latitude_lokasi = '';
         lokasiData.longitude_lokasi = '';
     }
+};
+
+const filterText = (event) => {
+    lokasiData.nama_lokasi = event.target.value.replace(/[0-9]/g, '');
 };
 
 const resetForm = () => {

@@ -19,7 +19,6 @@ class NilaiSeeder extends Seeder
             ['predikat_nilai' => 'Baik'],
             ['predikat_nilai' => 'Cukup'],
             ['predikat_nilai' => 'Kurang'],
-            ['predikat_nilai' => 'Belum Dinilai'],
         ];
 
         foreach ($list_nilai as $nilai) {

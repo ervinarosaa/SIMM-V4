@@ -47,36 +47,10 @@ class PesertaController extends Controller
         ]);
     }
 
-    public function mahasiswa()
-    {
-        $mahasiswa = Peserta::with(["lokasi", "institusi", "status"])
-            ->whereHas('institusi', function ($query) {
-                $query->where("tingkat_pendidikan", "Perguruan Tinggi");
-            })
-            ->get();
-        return response()->json([
-            "message" => "Lihat semua mahasiswa",
-            "data" => $mahasiswa
-        ]);
-    }
-
-    public function siswa()
-    {
-        $siswa = Peserta::with(["lokasi", "institusi", "status"])
-            ->whereHas('institusi', function ($query) {
-                $query->where("tingkat_pendidikan", "Sekolah Kejuruan");
-            })
-            ->get();
-        return response()->json([
-            "message" => "Lihat semua siswa",
-            "data" => $siswa
-        ]);
-    }
-
     public function arsipPeserta()
     {
         $statusAktif = Status::where("nama_status", "Aktif")->first();
-        $peserta = Peserta::with(["lokasi", "institusi", "sertifikat", "nilai", "status"])
+        $peserta = Peserta::with(["lokasi", "institusi", "sertifikat", "nilai", "status", "dokumen"])
             ->where("id_status", "!=", $statusAktif->id)->get();
         return response()->json([
             "message" => "Lihat semua arsip peserta",
@@ -107,9 +81,7 @@ class PesertaController extends Controller
         ]);
 
         $status = Status::where("nama_status", "Aktif")->first();
-        $nilai = Nilai::where("predikat_nilai", "Belum Dinilai")->first();
         $data["id_status"] = $status->id;
-        $data["id_nilai"] = $nilai->id;
         $data["id_user"] = $user->id;
 
         $peserta = Peserta::create($data);

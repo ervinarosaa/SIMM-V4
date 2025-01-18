@@ -11,7 +11,7 @@
                     <span class="text-red-500">*</span>
                 </label>
                 <label class="input input-bordered flex items-center h-[30px]">
-                    <input type="text" class="grow capitalize" v-model="kabagData.nama_kabag" required />
+                    <input type="text" class="grow capitalize" v-model="kabagData.nama_kabag" @input="filterText" required />
                 </label>
             </div>
 
@@ -68,6 +68,10 @@ const kabagData = reactive({
     nip_kabag: props.lokasi?.kepala_bagian?.nip_kabag || '',
     email: props.lokasi?.kepala_bagian?.user?.email || '',
 });
+
+const filterText = (event) => {
+    kabagData.nama_kabag = event.target.value.replace(/[0-9]/g, '');
+};
 
 watch(() => props.lokasi, (newLokasi) => {
     kabagData.nama_kabag = newLokasi?.kepala_bagian?.nama_kabag || '';

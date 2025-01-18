@@ -187,13 +187,13 @@
                                 <tbody>
                                     <tr v-for="presensi in detailPresensi" :key="presensi.id" class="text-center">
                                         <td class="text-lg">{{ formatPresensiDate(presensi.created_at) }}</td>
-                                        <td class="w-[150px] text-lg">{{ presensi.keterangan.nama_keterangan }}</td>
+                                        <td class="w-[150px] text-lg">{{ presensi.keterangan_presensi }}</td>
                                         <td class="min-w-[250px]">
                                             <div class="lg:max-w-6xl lg:mx-auto p-4">
                                                 <div class="flex justify-center">
                                                     <iframe 
-                                                        v-if="presensi.latitude && presensi.longitude" 
-                                                        :src="`https://www.google.com/maps?q=${presensi.latitude},${presensi.longitude}&hl=es;z=14&output=embed`" 
+                                                        v-if="presensi.latitude_presensi && presensi.longitude_presensi" 
+                                                        :src="`https://www.google.com/maps?q=${presensi.latitude_presensi},${presensi.longitude_presensi}&hl=es;z=14&output=embed`" 
                                                         width="80%" 
                                                         height="175" 
                                                         style="border:0;" 

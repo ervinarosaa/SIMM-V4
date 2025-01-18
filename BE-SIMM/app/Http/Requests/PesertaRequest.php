@@ -33,7 +33,7 @@ class PesertaRequest extends FormRequest
             'fakultas' => 'required|max:255',
             'jurusan' => 'required|max:255',
             'id_institusi' => 'required|exists:institusi,id',
-            'id_nilai' => 'exists:nilai,id',
+            'id_nilai' => 'nullable|exists:nilai,id',
             'nomor_telepon' => 'required|max:255',
             'tanggal_mulai' => 'required|date',
             'tanggal_selesai' => 'required|date',

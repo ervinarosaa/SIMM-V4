@@ -11,7 +11,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://simm-kemenagsby.com',
+        target: 'http://localhost:8000',
         changeOrigin: true,
       }
     }

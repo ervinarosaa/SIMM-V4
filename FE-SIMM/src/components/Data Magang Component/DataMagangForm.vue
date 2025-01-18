@@ -14,7 +14,7 @@
                         <span class="text-red-500">*</span>
                     </label>
                     <label class="input input-bordered flex items-center h-[30px] lg:w-[250px]">
-                        <input type="text" class="grow" v-model="peserta.nomor_induk" required/>
+                        <input type="number" class="grow" v-model="peserta.nomor_induk" required/>
                     </label>
                 </div>
                 <div class="flex flex-col gap-1">
@@ -71,7 +71,7 @@
                             <span class="text-red-500">*</span>
                         </label>
                         <label class="input input-bordered flex items-center h-[30px]">
-                            <input type="text" class="grow capitalize" v-model="peserta.nama_peserta" required />
+                            <input type="text" class="grow capitalize" v-model="peserta.nama_peserta" name="nama_peserta" @input="filterText" required />
                         </label>
                     </div>
                     <div class="flex flex-col gap-1">
@@ -90,7 +90,7 @@
                             <span class="text-red-500">*</span>
                         </label>
                         <label class="input input-bordered flex items-center h-[30px]">
-                            <input type="text" class="grow capitalize" v-model="peserta.nomor_telepon" required />
+                            <input type="text" class="grow capitalize" v-model="peserta.nomor_telepon" name="nomor_telepon" @input="validatePhoneNumber" required />
                         </label>
                     </div>
                     <div class="flex flex-col gap-1">
@@ -163,8 +163,8 @@
                             <span class="text-red-500">*</span>
                         </label>
                         <label class="input input-bordered flex items-center h-[30px]">
-                            <input v-if="AuthStore.user.role.nama_role==='Admin'" type="text" class="grow capitalize" v-model="peserta.fakultas" />
-                            <input v-else type="text" class="grow capitalize" v-model="peserta.fakultas" required />
+                            <input v-if="AuthStore.user.role.nama_role==='Admin'" type="text" class="grow capitalize" v-model="peserta.fakultas" name="fakultas" @input="filterText" />
+                            <input v-else type="text" class="grow capitalize" v-model="peserta.fakultas" name="fakultas" @input="filterText" required />
                         </label>
                     </div>
                     <div class="flex flex-col gap-1">
@@ -173,8 +173,8 @@
                             <span class="text-red-500">*</span>
                         </label>
                         <label class="input input-bordered flex items-center h-[30px]">
-                            <input v-if="AuthStore.user.role.nama_role==='Admin'" type="text" class="grow capitalize" v-model="peserta.jurusan" />
-                            <input v-else type="text" class="grow capitalize" v-model="peserta.jurusan" />
+                            <input v-if="AuthStore.user.role.nama_role==='Admin'" type="text" class="grow capitalize" v-model="peserta.jurusan" name="jurusan" @input="filterText" />
+                            <input v-else type="text" class="grow capitalize" v-model="peserta.jurusan" name="jurusan" @input="filterText" required/>
                         </label>
                     </div>
                 </div>
@@ -194,13 +194,13 @@
                     <div class="flex flex-col gap-1">
                         <label for="Dosen Pembimbing" class="text-sm font-bold">Dosen Pembimbing</label>
                         <label class="input input-bordered flex items-center h-[30px]">
-                            <input type="text" class="grow capitalize" v-model="peserta.nama_pembimbing" />
+                            <input type="text" class="grow capitalize" v-model="peserta.nama_pembimbing" name="nama_pembimbing" @input="filterText" />
                         </label>
                     </div>
                     <div class="flex flex-col gap-1">
                         <label for="Kontak Dosen Pembimbing" class="text-sm font-bold">Kontak Dosen Pembimbing</label>
                         <label class="input input-bordered flex items-center h-[30px]">
-                            <input type="text" class="grow capitalize" v-model="peserta.kontak_pembimbing" />
+                            <input type="text" class="grow capitalize" v-model="peserta.kontak_pembimbing"  name="kontak_pembimbing" @input="validatePhoneNumber" />
                         </label>
                     </div>
                     <div class="flex flex-col gap-1">
@@ -212,7 +212,7 @@
                         <label class="input input-bordered flex items-center h-[30px]">
                             <input type="file" class="grow" accept=".png,.jpeg,.jpg" @change="handleFileChange" />
                         </label>
-                        <div class="flex gap-2 mt-1">
+                        <div class="flex flex-col lg:flex-row gap-2 mt-1">
                             <div class="w-28 aspect-[3/4] rounded-xl overflow-hidden">
                                 <img :src="previewImage" class="rounded-xl w-full h-full object-cover" />
                             </div>
@@ -320,6 +320,20 @@ const peserta = reactive({
     id_institusi: props.peserta?.id_institusi || "",
     foto_profil: props.peserta?.foto_profil || profilDefault,
 });
+
+const filterText = (event) => {
+    const fieldName = event.target.name;
+    if (peserta[fieldName] !== undefined) {
+        peserta[fieldName] = event.target.value.replace(/[0-9]/g, '');
+    }
+};
+
+const validatePhoneNumber = (event) => {
+    const fieldName = event.target.name; 
+    if (peserta[fieldName] !== undefined) {
+        peserta[fieldName] = event.target.value.replace(/[^0-9]/g, '');
+    }
+};
 
 const minEndDate = computed(() => {
     if (peserta.tanggal_mulai) {

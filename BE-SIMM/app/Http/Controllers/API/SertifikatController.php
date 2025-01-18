@@ -81,7 +81,7 @@ class SertifikatController extends Controller
         ])->find($id);
     
         // Ambil data sertifikat
-        $sertifikat = $peserta->sertifikat->first();
+        $sertifikat = $peserta->sertifikat;
     
         $fotoUrl = public_path("storage/foto_profil/" . basename($peserta->foto_profil));
     

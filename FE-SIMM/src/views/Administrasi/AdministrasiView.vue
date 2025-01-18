@@ -294,6 +294,7 @@ const confirmDelete = async () => {
             failedMessage.value = 'Gagal menghapus dokumen. Silahkan coba lagi!';
         } finally {
             showDeleteDialog.value = false;
+            await FetchDokumen()
         }
     }
 };
