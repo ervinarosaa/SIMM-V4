@@ -84,7 +84,7 @@
                                     <div class="flex flex-col items-start text-start">
                                         <p><span class="pi pi-user pr-2"></span>{{ presensi.peserta.nama_peserta }}</p>
                                         <p><span class="pi pi-building pr-2"></span>{{ presensi.peserta.institusi.nama_institusi }}</p>
-                                        <p><span class="pi pi-map pr-2"></span>{{ presensi.peserta.lokasi.nama_lokasi }}</p>
+                                        <p><span class="pi pi-map pr-2"></span>{{ presensi.lokasi.nama_lokasi }}</p>
                                     </div>
                                 </td>
                                 <td class="text-sm min-w-[200px]">

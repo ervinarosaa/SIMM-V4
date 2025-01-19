@@ -17,7 +17,7 @@ class PresensiController extends Controller
      */
     public function index()
     {
-        $presensi = Presensi::with(["peserta.institusi","peserta.lokasi"])->get();
+        $presensi = Presensi::with(["peserta.institusi","lokasi"])->get();
 
         return response()->json([
             "message" => "Lihat semua presensi",
@@ -47,7 +47,7 @@ class PresensiController extends Controller
             ], 422);
         }
 
-        $lokasi = Lokasi::find($peserta->id_lokasi);
+        $lokasi = Lokasi::find($data["id_lokasi"]);
         if (!$lokasi) {
             return response()->json([
                 "message" => "Lokasi magang peserta tidak ditemukan!"

@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('longitude_presensi');
             $table->uuid('id_peserta');
             $table->foreign('id_peserta')->references('id')->on('peserta')->onUpdate('cascade')->onDelete('cascade');
+            $table->uuid('id_lokasi');
+            $table->foreign('id_lokasi')->references('id')->on('lokasi')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

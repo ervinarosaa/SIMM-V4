@@ -233,6 +233,7 @@ const handleSubmit = async () => {
                 headers: { Authorization: `Bearer ${AuthStore.token}`},
             });
             formData.append("id_peserta", id_peserta.value);
+            formData.append("id_lokasi", data.data.id_lokasi);
             formData.append("latitude_presensi", data.data.lokasi.latitude_lokasi);
             formData.append("longitude_presensi", data.data.lokasi.longitude_lokasi);
         } else {
@@ -240,6 +241,7 @@ const handleSubmit = async () => {
                 headers: { Authorization: `Bearer ${AuthStore.token}`},
             });
             formData.append("id_peserta", data.user.peserta.id);
+            formData.append("id_lokasi", data.user.peserta.id_lokasi);
             formData.append("latitude_presensi", latitude_presensi.value);
             formData.append("longitude_presensi", longitude_presensi.value);
         }
