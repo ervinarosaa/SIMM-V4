@@ -45,14 +45,14 @@
                     </label>
                     <input v-if="AuthStore.user.role.nama_role === 'Admin'"
                         type="datetime-local" 
-                        class="input input-bordered h-[30px]" 
+                        class="input input-bordered h-[30px] w-full" 
                         v-model="tanggal_presensi" 
                         :max="currentDate" 
                         required 
                     />
                     <input v-else-if="AuthStore.user.role.nama_role === 'Peserta'"
                         type="datetime-local" 
-                        class="input input-bordered h-[30px] grow" 
+                        class="input input-bordered h-[30px] w-full" 
                         v-model="tanggal_presensi"
                         readonly 
                     />
