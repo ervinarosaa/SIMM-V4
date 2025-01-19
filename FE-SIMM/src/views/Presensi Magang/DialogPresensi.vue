@@ -52,7 +52,7 @@
                     />
                     <input v-else-if="AuthStore.user.role.nama_role === 'Peserta'"
                         type="datetime-local" 
-                        class="input input-bordered h-[30px]" 
+                        class="input input-bordered h-[30px] grow" 
                         v-model="tanggal_presensi"
                         readonly 
                     />
