@@ -80,10 +80,10 @@
                     <div class="flex flex-col gap-1">
                         <div class="flex flex-col-reverse lg:flex-row justify-between">
                             <h1 v-if="logbook.peserta?.nama_peserta.length >39" class="text-xl font-bold">
-                                {{ logbook.peserta.nama_peserta.substring(0,38) }} ... - ({{ logbook.peserta.lokasi.nama_lokasi }})
+                                {{ logbook.peserta.nama_peserta.substring(0,38) }} ... - ({{ logbook.lokasi.nama_lokasi }})
                             </h1>
                             <h1 v-else class="text-xl font-bold">
-                                {{ logbook.peserta?.nama_peserta }} - {{ logbook.peserta?.lokasi?.nama_lokasi }}
+                                {{ logbook.peserta?.nama_peserta }} - {{ logbook.lokasi?.nama_lokasi }}
                             </h1>
                             <div class="flex flex-row gap-2 lg:justify-center items-center" v-if="AuthStore.user && AuthStore.user.role.nama_role === 'Peserta'">
                                 <!-- View Detail Logbook -->
@@ -239,7 +239,7 @@ const filteredLogbook = computed(() => {
         const matchesSearchQuery = searchQuery.value === '' ||
             logbook.peserta.nama_peserta.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
             logbook.peserta.institusi.nama_institusi.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-            logbook.peserta.lokasi.nama_lokasi.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+            logbook.lokasi.nama_lokasi.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
             logbook.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
             logbook.deskripsi.toLowerCase().includes(searchQuery.value.toLowerCase());
 

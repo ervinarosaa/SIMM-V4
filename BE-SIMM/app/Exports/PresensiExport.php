@@ -37,11 +37,11 @@ class PresensiExport implements FromCollection
                 ["Fakultas", ":", $peserta->fakultas ?? "-"],
                 ["Jurusan", ":", $peserta->jurusan],
                 ["Institusi", ":", $peserta->institusi->nama_institusi],
-                ["Lokasi Magang", ":", $peserta->lokasi->nama_lokasi],
                 [
                     "No",
                     "Tanggal",
                     "Keterangan",
+                    "Lokasi Magang",
                     "Geolocation",
                 ],
             ]);
@@ -55,6 +55,7 @@ class PresensiExport implements FromCollection
                         "No" => $index + 1,
                         "Tanggal" => $presensi->tanggal_presensi,
                         "Keterangan" => $presensi->keterangan_presensi,
+                        "Lokasi Magang" => $presensi->lokasi->nama_lokasi,
                         "Geolocation" => $geolocationUrl,
                     ];
                 });
@@ -90,7 +91,7 @@ class PresensiExport implements FromCollection
                         "Nama Peserta" => $presensi->peserta->nama_peserta,
                         "NIS/NIM" => $presensi->peserta->nomor_induk,
                         "Institusi" => $presensi->peserta->institusi->nama_institusi ?? "N/A",
-                        "Lokasi Magang" => $presensi->peserta->lokasi->nama_lokasi ?? "N/A",
+                        "Lokasi Magang" => $presensi->lokasi->nama_lokasi ?? "N/A",
                         "Keterangan" => $presensi->keterangan_presensi,
                         "Geolocation" => $geolocationUrl,
                     ];

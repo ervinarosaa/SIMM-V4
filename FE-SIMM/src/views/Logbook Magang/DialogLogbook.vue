@@ -151,6 +151,7 @@ const handleSubmit = async () => {
         });
 
         formData.append("id_peserta", data.user.peserta.id);
+        formData.append("id_lokasi", data.user.peserta.id_lokasi);
 
         if (logbookData.dokumentasi instanceof File) {
             formData.append("dokumentasi", logbookData.dokumentasi);
@@ -180,7 +181,7 @@ const handleSubmit = async () => {
     } catch (error) {
         console.error('Failed to save logbook:', error);
         isFailed.value = true;
-        failedMessage.value = error.response.data.message || 'Gagal menyimpan data. Silahkan coba lagi!';
+        failedMessage.value = 'Gagal menyimpan data. Silahkan coba lagi!';
     }
 };
 

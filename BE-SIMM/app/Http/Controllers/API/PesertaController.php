@@ -108,7 +108,7 @@ class PesertaController extends Controller
     {
         $peserta = Peserta::with([
             "user", "lokasi", "status", "institusi", "nilai",
-            "sertifikat", "logbook", "presensi", "dokumen" 
+            "sertifikat", "logbook.lokasi", "presensi.lokasi", "dokumen" 
         ])->find($id);
 
         if(!$peserta){
@@ -169,7 +169,7 @@ class PesertaController extends Controller
         }
 
         // Update kuota berdasarkan lokasi
-        if ($data["id_lokasi"] !== $peserta->id_lokasi) {
+        if ($data["id_lokasi"] !== $peserta->id_lokasi && $peserta->id_status === $status->id) {
             $oldLokasi = Lokasi::find($peserta->id_lokasi);
             if ($oldLokasi) {
                 $oldLokasi->kuota_terisi -= 1;

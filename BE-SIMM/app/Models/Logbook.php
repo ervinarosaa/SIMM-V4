@@ -18,10 +18,16 @@ class Logbook extends Model
         "dokumentasi",
         "tanggal_logbook",
         "id_peserta",
+        "id_lokasi",
     ];
 
     public function peserta()
     {
         return $this->belongsTo(Peserta::class, 'id_peserta');
+    }
+
+    public function lokasi()
+    {
+        return $this->belongsTo(Lokasi::class, 'id_lokasi');
     }
 }

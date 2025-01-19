@@ -41,11 +41,11 @@ class LogbookExport implements FromCollection, WithDrawings
                 ["Fakultas", ":", $peserta->fakultas ?? "-"],
                 ["Jurusan", ":", $peserta->jurusan],
                 ["Institusi", ":", $peserta->institusi->nama_institusi],
-                ["Lokasi Magang", ":", $peserta->lokasi->nama_lokasi],
                 [
                     "No",
                     "Tanggal",
                     "Title",
+                    "Lokasi Magang",
                     "Kegiatan",
                     "Dokumentasi"
                 ],
@@ -65,6 +65,7 @@ class LogbookExport implements FromCollection, WithDrawings
                         "No" => $index + 1,
                         "Tanggal" => $logbook->tanggal_logbook,
                         "Title" => $logbook->title,
+                        "Lokasi Magang" => $logbook->lokasi->nama_lokasi,
                         "Kegiatan" => $logbook->deskripsi,
                         "Dokumentasi" => null, 
                     ];
@@ -104,7 +105,7 @@ class LogbookExport implements FromCollection, WithDrawings
                         "Nama Peserta" => $logbook->peserta->nama_peserta,
                         "NIS/NPM" => $logbook->peserta->nomor_induk,
                         "Institusi" => $logbook->peserta->institusi->nama_institusi ?? "N/A",
-                        "Lokasi Magang" => $logbook->peserta->lokasi->nama_lokasi ?? "N/A",
+                        "Lokasi Magang" => $logbook->lokasi->nama_lokasi ?? "N/A",
                         "Title" => $logbook->title,
                         "Kegiatan" => $logbook->deskripsi,
                         "Dokumentasi" => null,

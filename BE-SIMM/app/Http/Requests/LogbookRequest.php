@@ -26,7 +26,8 @@ class LogbookRequest extends FormRequest
             "deskripsi" => "required",
             "dokumentasi" => "nullable|image|mimes:jpeg,jpg,png|max:2048",
             "tanggal_logbook" => "required|date",
-            "id_peserta" => "required|uuid",
+            "id_peserta" => "required|uuid|exists:peserta,id",
+            "id_lokasi" => "required|uuid|exists:lokasi,id",
         ];
     }
 
@@ -42,6 +43,10 @@ class LogbookRequest extends FormRequest
             "tanggal_logbook.required" => "Tanggal logbook harus diisi",
             "id_peserta.required" => "ID peserta harus diisi",
             "id_peserta.uuid" => "ID peserta harus dalam format UUID yang valid",
+            'id_peserta.exists' => 'Peserta tidak valid',
+            "id_lokasi.required" => "ID lokasi harus diisi",
+            "id_lokasi.uuid" => "ID lokasi harus dalam format UUID yang valid",
+            'id_lokasi.exists' => 'Lokasi tidak valid',
         ];
     }
 }

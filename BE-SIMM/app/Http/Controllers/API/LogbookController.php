@@ -23,7 +23,7 @@ class LogbookController extends Controller
     {
         $logbook = Logbook::with([
             "peserta.institusi",
-            "peserta.lokasi",
+            "lokasi",
         ])->get();
 
         return response()->json([
@@ -63,6 +63,7 @@ class LogbookController extends Controller
             "dokumentasi" => $data["dokumentasi"],
             "tanggal_logbook" => $data["tanggal_logbook"],
             "id_peserta" => $data["id_peserta"],
+            "id_lokasi" => $data["id_lokasi"],
         ]);
 
         return response()->json([
@@ -77,7 +78,7 @@ class LogbookController extends Controller
     {
         $logbook = Logbook::with([
             "peserta.institusi",
-            "peserta.lokasi",
+            "lokasi",
         ])->find($id);
 
         if(!$logbook){
@@ -94,7 +95,7 @@ class LogbookController extends Controller
 
     public function LogbookByIdPeserta($id_peserta)
     {
-        $logbook = Logbook::with(["peserta.institusi","peserta.lokasi",])
+        $logbook = Logbook::with(["peserta.institusi","lokasi",])
             ->where("id_peserta", $id_peserta)->get();
 
         if ($logbook->isEmpty()) {

@@ -75,13 +75,7 @@ class PresensiController extends Controller
         }
 
         try {
-            Presensi::create([
-                "tanggal_presensi" => $data["tanggal_presensi"],
-                "longitude_presensi" => $data["longitude_presensi"],
-                "latitude_presensi" => $data["latitude_presensi"],
-                "keterangan_presensi" => $data["keterangan_presensi"],
-                "id_peserta" => $data["id_peserta"],
-            ]);
+            Presensi::create($request->all());
         } catch (\Exception $e) {
             return response()->json([
                 "message" => "Gagal menyimpan presensi!",
@@ -138,7 +132,7 @@ class PresensiController extends Controller
      */
     public function show(string $id)
     {
-        $presensi = Presensi::with(["peserta.institusi", "peserta.lokasi"])->find($id);
+        $presensi = Presensi::with(["peserta.institusi", "lokasi"])->find($id);
 
         if(!$presensi){
             return response()->json([
@@ -154,7 +148,7 @@ class PresensiController extends Controller
 
     public function PresensiByIdPeserta($id_peserta)
     {
-        $presensi = Presensi::with(["peserta.institusi", "peserta.lokasi"])
+        $presensi = Presensi::with(["peserta.institusi", "lokasi"])
             ->where("id_peserta", $id_peserta)->get();
         
         if ($presensi->isEmpty()) {

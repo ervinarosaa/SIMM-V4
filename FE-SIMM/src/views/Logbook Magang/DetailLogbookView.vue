@@ -62,8 +62,8 @@
                 <p v-if="logbook.peserta?.nama_peserta">
                     <span class="pi pi-user"></span> {{ logbook.peserta.nama_peserta }}
                 </p>
-                <p v-if="logbook.peserta?.lokasi?.nama_lokasi">
-                    <span class="pi pi-map-marker"></span> {{ logbook.peserta.lokasi.nama_lokasi }}
+                <p v-if="logbook.lokasi?.nama_lokasi">
+                    <span class="pi pi-map-marker"></span> {{ logbook.lokasi.nama_lokasi }}
                 </p>
             </div>
 

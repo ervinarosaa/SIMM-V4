@@ -116,7 +116,7 @@ const handleSubmit = async () => {
     } catch (error) {
         console.error('Failed to save institusi:', error);
         isFailed.value = true;
-        failedMessage.value = error.response.data.message || 'Gagal menyimpan data. Silahkan coba lagi!';
+        failedMessage.value = 'Gagal menyimpan data. Silahkan coba lagi!';
     }
 };
 

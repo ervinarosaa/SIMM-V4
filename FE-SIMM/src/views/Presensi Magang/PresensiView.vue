@@ -221,7 +221,7 @@ const filteredPresensi = computed(() => {
         const matchesSearchQuery = searchQuery.value === '' ||
             presensi.peserta.nama_peserta.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
             presensi.peserta.institusi.nama_institusi.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-            presensi.peserta.lokasi.nama_lokasi.toLowerCase().includes(searchQuery.value.toLowerCase())||
+            presensi.lokasi.nama_lokasi.toLowerCase().includes(searchQuery.value.toLowerCase())||
             presensi.keterangan_presensi.toLowerCase().includes(searchQuery.value.toLowerCase());
 
         // Filter berdasarkan tanggal
