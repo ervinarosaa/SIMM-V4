@@ -48,7 +48,7 @@
                     <div class="stat-figure text-primary text-4xl">
                         <span class="pi pi-verified"></span>
                     </div>
-                    <div class="stat-title">Total Kuota Magang</div>
+                    <div class="stat-title">Total Kuota Tersedia</div>
                     <div class="stat-value text-primary">{{ AllScorecard.total_kuota_magang }}</div>
                 </div>
             </div>

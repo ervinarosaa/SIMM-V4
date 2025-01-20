@@ -24,7 +24,7 @@ class DashboardController extends Controller
 
             $totalLokasi = Lokasi::count();
 
-            $totalKuotaMagang = Lokasi::sum("kuota_magang");
+            $totalKuotaMagang = Lokasi::sum("kuota_magang") - Lokasi::sum("kuota_terisi");
 
             return response()->json([
                 "message" => "Berhasil menampilkan dashboard!",
