@@ -142,6 +142,9 @@
                                         <p class="text-xs w-0">
                                             <span class="pi pi-clock ml-1"></span> {{ formatDate(logbook.created_at) }}
                                         </p>
+                                        <p class="text-xs w-0">
+                                            <span class="pi pi-map pr-2"></span>{{ logbook.lokasi.nama_lokasi }}
+                                        </p>
                                     </div>
                                     
                                 </div>
@@ -186,10 +189,12 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="presensi in detailPresensi" :key="presensi.id" class="text-center">
-                                        <td class="text-lg">{{ formatDate(presensi.tanggal_presensi) }}</td>
+                                        <td class="text-lg">
+                                            {{ formatDate(presensi.tanggal_presensi) }}
+                                            <p><span class="pi pi-map pr-2"></span>{{ presensi.lokasi.nama_lokasi }}</p>
+                                        </td>
                                         <td class="w-[150px] text-lg">
                                             <p>{{ presensi.keterangan_presensi }}</p>
-                                            <p><span class="pi pi-map pr-2"></span>{{ presensi.lokasi.nama_lokasi }}</p>
                                         </td>
                                         <td class="min-w-[250px]">
                                             <div class="lg:max-w-6xl lg:mx-auto p-4">
