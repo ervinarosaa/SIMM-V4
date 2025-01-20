@@ -138,11 +138,11 @@
                                     <h2 v-else class="text-lg font-semibold">
                                         {{ logbook.title }} ({{ logbook.tanggal_logbook }})
                                     </h2>
-                                    <div class="flex justify-start">
-                                        <p class="text-xs w-0">
+                                    <div class="flex flex-row justify-start text-xs gap-2">
+                                        <p>
                                             <span class="pi pi-clock ml-1"></span> {{ formatDate(logbook.created_at) }}
                                         </p>
-                                        <p class="text-xs w-0">
+                                        <p>
                                             <span class="pi pi-map pr-2"></span>{{ logbook.lokasi.nama_lokasi }}
                                         </p>
                                     </div>
