@@ -257,6 +257,7 @@ import { onMounted, ref } from 'vue';
 import { customAPI } from '@/api';
 import { useAuthStore } from '@/stores/AuthStore';
 import { format } from 'date-fns';
+import { id } from 'date-fns/locale';
 import Breadcrumbs from '@/components/layouts/Breadcrumbs.vue';
 import profilDefault from '@/assets/profil-default.png';
 import Loading from '@/components/layouts/Loading.vue';
