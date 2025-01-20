@@ -11,7 +11,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://simm-kemenagsby.com/',
+        target: 'https://simm-kemenagsby.com/',
         changeOrigin: true,
       }
     }
