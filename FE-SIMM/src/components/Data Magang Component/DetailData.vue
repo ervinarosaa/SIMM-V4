@@ -186,8 +186,11 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="presensi in detailPresensi" :key="presensi.id" class="text-center">
-                                        <td class="text-lg">{{ formatPresensiDate(presensi.created_at) }}</td>
-                                        <td class="w-[150px] text-lg">{{ presensi.keterangan_presensi }}</td>
+                                        <td class="text-lg">{{ formatDate(presensi.tanggal_presensi) }}</td>
+                                        <td class="w-[150px] text-lg">
+                                            <p>{{ presensi.keterangan_presensi }}</p>
+                                            <p><span class="pi pi-map pr-2"></span>{{ presensi.lokasi.nama_lokasi }}</p>
+                                        </td>
                                         <td class="min-w-[250px]">
                                             <div class="lg:max-w-6xl lg:mx-auto p-4">
                                                 <div class="flex justify-center">
@@ -294,11 +297,7 @@ const PesertaById = async () => {
 };
 
 const formatDate = (date) => {
-    return format(new Date(date), 'dd-MM-yyyy HH:mm:ss');
-};
-
-const formatPresensiDate = (date) => {
-    return format(new Date(date), 'dd-MM-yyyy');
+    return format(new Date(date), 'dd MMMM yyyy HH:mm:ss', { locale: id });
 };
 
 const handleCardClickLogbook  = (LogbookID) => {
