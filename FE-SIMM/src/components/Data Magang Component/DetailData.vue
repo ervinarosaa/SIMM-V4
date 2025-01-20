@@ -131,22 +131,19 @@
                             class="card bg-base-100 border mx-2 my-1 px-2 py-2 rounded-lg"
                         >
                             <div class="card-body p-2">
-                                <div class="flex flex-col gap-1">
+                                <div>
                                     <h2 v-if="logbook.title.length >39" class="text-lg font-semibold">
                                         {{ logbook.title.substring(0,38) }} ... ({{ logbook.tanggal_logbook }})
                                     </h2>
                                     <h2 v-else class="text-lg font-semibold">
                                         {{ logbook.title }} ({{ logbook.tanggal_logbook }})
                                     </h2>
-                                    <div class="flex flex-col md:flex-row lg:flex-row lg:items-center md:gap-3 lg:gap-3 text-sm">
-                                        <p>
-                                            <span class="pi pi-clock"></span> {{ formatDate(logbook.created_at) }}
-                                        </p>
-                                        <p>
-                                            <span class="pi pi-map"></span>{{ logbook.lokasi.nama_lokasi }}
-                                        </p>
-                                    </div>
-                                    
+                                </div>
+                                <div class="flex flex-row items-center justify-content-start text-sm">
+                                    <p>
+                                        <span class="pi pi-clock"></span> {{ formatDate(logbook.created_at) }}
+                                        <span class="pi pi-map-marker"></span> {{ logbook.lokasi.nama_lokasi }}
+                                    </p>
                                 </div>
 
                                 <hr>
