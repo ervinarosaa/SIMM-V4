@@ -63,7 +63,7 @@ class PresensiController extends Controller
 
         if ($distance > 50) {
             return response()->json([
-                "message" => "Anda berada di luar radius 50 meter dari lokasi magang!",
+                "message" => "Anda berada di luar radius 50 meter dari lokasi magang! Silakan coba kembali menggunakan perangkat mobile untuk hasil yang lebih akurat",
                 "distance" => $distance,
                 "debug" => [
                             "latitude_presensi" => $data["latitude_presensi"],
