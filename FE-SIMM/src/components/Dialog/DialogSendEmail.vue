@@ -1,5 +1,7 @@
 <template>
     <div>
+        <!-- Loading Alert -->
+        <LoadingForm :show="isLoading" />
         <p class="font-bold text-2xl mb-1">Unggah File Attachment</p>
         <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" @click="handleClose">✕</button>
         <hr class="pb-3">
@@ -42,6 +44,7 @@ import { ref } from 'vue';
 import { customAPI } from '@/api';
 import { useAuthStore } from '@/stores/AuthStore';
 import FailedAlert from '@/components/Alerts/FailedAlert.vue';
+import LoadingForm from '@/components/Alerts/LoadingForm.vue';
 
 const AuthStore = useAuthStore();
 const emit = defineEmits(["closeModal", "saved"]);
@@ -76,6 +79,7 @@ const resetForm = () => {
 };
 
 // State untuk mengontrol alert
+const isLoading = ref(false);
 const isFailed = ref(false);
 const failedMessage = ref('');
 
@@ -86,6 +90,7 @@ const handleSubmit = async () => {
     }
 
     try {
+        isLoading.value = true; // Tampilkan loading
         const formData = new FormData();
         formData.append("file", unggah_dokumen.value);
         formData.append("jenis_dokumen", jenis_dokumen.value);
@@ -104,7 +109,9 @@ const handleSubmit = async () => {
         console.error('Failed to send documen:', error);
         isFailed.value = true;
         failedMessage.value = error.response.data.message || 'Gagal menyimpan dan mengirim dokumen. Silahkan coba lagi!';
-    } 
+    } finally {
+        isLoading.value = false; // Sembunyikan loading
+    }
 };
 
 const handleClose = () => {

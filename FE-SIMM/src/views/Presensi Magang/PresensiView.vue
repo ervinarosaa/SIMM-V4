@@ -1,31 +1,30 @@
 <template>
-    <div class="mt-5 mx-5 lg:ml-10 max-w-[340px] sm:max-w-[660px] md:max-w-[750px] lg:max-w-full">
+    <div class="mt-5 mx-5 lg:ml-10 min-w-[340px] sm:max-w-[660px] md:max-w-[750px] lg:max-w-full">
         <h1 class="text-2xl lg:text-3xl font-bold text-center mb-4 pb-4">Presensi Magang</h1>
 
-        <div class="flex flex-col lg:flex-row  gap-2 lg:items-center">
-            <div class="flex gap-2">
-                <button class="btn btn-sm btn-primary text-white" @click="openModalAdd()">
-                    <span class="pi pi-id-card"></span> Tambah
-                </button>
+        <div class="flex flex-col lg:flex-row gap-2 lg:items-center">
+            <button class="btn btn-sm btn-primary text-white" @click="openModalAdd()" v-if="isPesertaAktif">
+                <span class="pi pi-id-card"></span> Tambah
+            </button>
 
-                <div class="modal" :class="{ 'modal-open': showModalAdd }">
-                    <div class="modal-box">
-                        <DialogTambahPresensi @closeModal="closeModal" @saved="handleSaved" />
-                    </div>
+            <div class="modal" :class="{ 'modal-open': showModalAdd }">
+                <div class="modal-box">
+                    <DialogTambahPresensi @closeModal="closeModal" @saved="handleSaved" />
                 </div>
+            </div>
 
-                <!-- Export Logbook For Admin -->
-                <button class="btn btn-sm btn-primary text-white px-5" @click="openModalExport()" v-if="AuthStore.user && AuthStore.user.role?.nama_role === 'Admin'">
-                    <span class="pi pi-file-excel"></span> Export
-                </button>
+            <!-- Export Logbook For Admin -->
+            <button class="btn btn-sm btn-primary text-white px-5" @click="openModalExport()" v-if="AuthStore.user && AuthStore.user.role?.nama_role === 'Admin'">
+                <span class="pi pi-file-excel"></span> Export
+            </button>
 
-                <div class="modal" :class="{ 'modal-open': showModalExport }">
-                    <div class="modal-box">
-                        <DialogEksporPresensi @closeModal="closeModalExport" :logbookMode="false" @saved="handleSavedExport" />
-                    </div>
+            <div class="modal" :class="{ 'modal-open': showModalExport }">
+                <div class="modal-box">
+                    <DialogEksporPresensi @closeModal="closeModalExport" :logbookMode="false" @saved="handleSavedExport" />
                 </div>
+            </div>
 
-                <!-- Export Logbook For Peserta -->
+            <!-- Export Presensi For Peserta -->
             <button 
                 class="btn btn-sm btn-primary text-white px-5" 
                 @click="openModalPeserta()" 
@@ -38,21 +37,17 @@
                     <ExportFromPeserta @closeModal="closeModalPeserta" :logbookMode="false" :peserta="selectedPeserta" @saved="handleSavedPeserta" />
                 </div>
             </div>
-            </div>
-            
-            <div class="flex flex-col md:flex-row lg:flex-row gap-2 ">
-                <!-- Search -->
-                <label class="input input-bordered flex items-center h-[33px] lg:w-full" 
-                    v-if="AuthStore.user.role?.nama_role !== 'Peserta'">
-                    <input type="text" v-model="searchQuery" placeholder="Cari Presensi..." class="input input-sm w-full justify-between" />
-                    <span class="pi pi-search"></span>
-                </label>
+            <!-- Search -->
+            <label class="input input-bordered flex items-center h-[33px] lg:w-full" 
+                v-if="AuthStore.user.role?.nama_role !== 'Peserta'">
+                <input type="text" v-model="searchQuery" placeholder="Cari Presensi..." class="input input-sm w-full justify-between" />
+                <span class="pi pi-search"></span>
+            </label>
 
-                <!-- Date Filter -->
-                <label class="input input-bordered flex items-center h-[33px] lg:w-full">
-                    <input type="date" v-model="selectedDate" class="input input-sm w-full" />
-                </label>
-            </div>
+            <!-- Date Filter -->
+            <label class="input input-bordered flex items-center h-[33px] lg:w-full">
+                <input type="date" v-model="selectedDate" class="input input-sm w-full" />
+            </label>
         </div>
 
         <div v-if="loading === true" class="my-5">
@@ -183,6 +178,7 @@ const searchQuery = ref('');
 const selectedDate = ref(null);
 const allPresensi = ref([]);
 const peserta = ref(null);
+const isPesertaAktif = ref(false);
 
 const FetchPresensi = async () => {
     try {
@@ -199,6 +195,7 @@ const FetchPresensi = async () => {
             });
 
             peserta.value = pesertaData.user.peserta;
+            isPesertaAktif.value = peserta.value.status === "aktif";
 
             const peserta_id = pesertaData.user.peserta.id;
             const { data } = await customAPI.get(`/presensi/peserta/${peserta_id}`, {

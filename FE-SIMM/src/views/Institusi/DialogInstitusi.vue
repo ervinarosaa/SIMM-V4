@@ -1,5 +1,8 @@
 <template>
     <div>
+        <!-- Loading Alert -->
+        <LoadingForm :show="isLoading" />
+
         <p class="font-bold text-2xl mb-1">{{ editMode ? 'Ubah Institusi Pendidikan' : 'Tambah Institusi Pendidikan' }}</p>
         <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" @click="handleClose">✕</button>
         <hr class="pb-3">
@@ -44,6 +47,7 @@ import { customAPI } from '@/api';
 import { useAuthStore } from '@/stores/AuthStore';
 import SuccessAlert from '@/components/Alerts/SuccessAlert.vue';
 import FailedAlert from '@/components/Alerts/FailedAlert.vue';
+import LoadingForm from '@/components/Alerts/LoadingForm.vue';
 
 const AuthStore = useAuthStore();
 const emit = defineEmits(["closeModal", "institusiSaved"]);
@@ -82,6 +86,7 @@ const resetForm = () => {
 };
 
 // State untuk mengontrol alert
+const isLoading = ref(false);
 const isSuccess = ref(false);
 const isFailed = ref(false);
 const successMessage = ref('');
@@ -89,6 +94,8 @@ const failedMessage = ref('');
 
 const handleSubmit = async () => {
     try {
+        isLoading.value = true; // Tampilkan loading
+
         const formData = new FormData();
         formData.append("nama_institusi", capitalizeWords(institusiData.nama_institusi));
         formData.append("tingkat_pendidikan", institusiData.tingkat_pendidikan);
@@ -111,12 +118,15 @@ const handleSubmit = async () => {
 
         emit('institusiSaved'); 
         resetForm(); 
+
         isSuccess.value = true;
         successMessage.value = 'Institusi Pendidikan berhasil disimpan!';
     } catch (error) {
         console.error('Failed to save institusi:', error);
         isFailed.value = true;
         failedMessage.value = 'Gagal menyimpan data. Silahkan coba lagi!';
+    } finally {
+        isLoading.value = false; // Sembunyikan loading
     }
 };
 

@@ -23,12 +23,10 @@ class SertifikatRequest extends FormRequest
     {
         return [
             "nomor_sertifikat" => "required|string",
-            "id_nilai" => "required|exists:nilai,id",
-            "id_peserta" => "required|uuid",
-            "nama_penandatangan" => "required|string",
-            "nip_penandatangan" => "required|string",
-            "jabatan_penandatangan" => "required|string",
-            "tanggal_penandatangan" => "required|string",
+            "id_nilai" => "required|uuid|exists:nilai,id",
+            "id_peserta" => "required|uuid|exists:peserta,id",
+            "id_penandatangan" => "required|uuid|exists:penandatangan,id",
+            "tanggal_sertifikat" => "required|string",
         ];
     }
 
@@ -40,11 +38,10 @@ class SertifikatRequest extends FormRequest
             "id_nilai.required" => "Nilai harus diisi",
             "id_nilai.exists" => "Nilai tidak valid",
             "id_peserta.required" => "ID peserta harus diisi",
-            "id_peserta.uuid" => "ID peserta harus dalam format UUID yang valid",
-            "nama_penandatangan.required" => "Nama Penandatangan harus diisi",
-            "nip_penandatangan.required" => "NIP Penandatangan harus diisi",
-            "jabatan_penandatangan.required" => "Jabatan Penandatangan harus diisi",
-            "tanggal_penandatangan.required" => "Tanggal Penandatangan harus diisi",
+            "id_peserta.exists" => "Peserta tidak valid",
+            "id_penandatangan.uuid" => "ID penandatangan harus dalam format UUID yang valid",
+            "id_penandatangan.exists" => "Penandatangan tidak valid",
+            "tanggal_sertifikat.required" => "Tanggal Penandatangan harus diisi",
         ];
     }
 }

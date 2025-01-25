@@ -1,5 +1,8 @@
 <template>
     <div>
+        <!-- Loading Alert -->
+        <LoadingForm :show="isLoading" />
+
         <p class="font-bold text-2xl mb-1">Kepala Bagian</p>
         <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" @click="handleClose">✕</button>
         <hr class="pb-3">
@@ -51,6 +54,7 @@ import { ref, reactive, watch } from 'vue';
 import { customAPI } from '@/api';
 import { useAuthStore } from '@/stores/AuthStore';
 import FailedAlert from '@/components/Alerts/FailedAlert.vue';
+import LoadingForm from '@/components/Alerts/LoadingForm.vue';
 
 const AuthStore = useAuthStore();
 const emit = defineEmits(["closeModal", "SavedKabag"]);
@@ -90,11 +94,14 @@ const resetForm = () => {
 };
 
 // State untuk mengontrol alert
+const isLoading = ref(false);
 const isFailed = ref(false);
 const failedMessage = ref('');
 
 const handleSubmit = async () => {
     try {
+        isLoading.value = true; // Tampilkan loading
+
         const formData = new FormData();
         formData.append("nama_kabag", capitalizeWords(kabagData.nama_kabag));
         formData.append("nip_kabag", kabagData.nip_kabag);
@@ -114,7 +121,9 @@ const handleSubmit = async () => {
         console.error('Failed to save kepala bagian:', error);
         isFailed.value = true;
         failedMessage.value ='Gagal menyimpan data. Silahkan coba lagi!';
-    } 
+    } finally {
+        isLoading.value = false; // Sembunyikan loading
+    }
 };
 
 const handleClose = () => {

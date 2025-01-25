@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 import { useRouter } from 'vue-router';
 import { customAPI } from '@/api';
 import { useToast } from 'vue-toast-notification';
+import Swal from 'sweetalert2';
 
 export const useAuthStore = defineStore('AuthStore', () => {
     const router = useRouter();
@@ -19,9 +20,6 @@ export const useAuthStore = defineStore('AuthStore', () => {
     const token = ref(safeParse(localStorage.getItem('token')));
     const user = ref(safeParse(localStorage.getItem('user')));
 
-    const isError = ref(false);
-    const errorMsg = ref('');
-
     const setToken = (tokenValue) => {
         token.value = tokenValue;
         localStorage.setItem('token', JSON.stringify(tokenValue));
@@ -34,9 +32,6 @@ export const useAuthStore = defineStore('AuthStore', () => {
 
     const loginUser = async (inputData) => {
         try {
-            isError.value = false;
-            errorMsg.value = '';
-
             const { email, password } = inputData;
             const { data } = await customAPI.post('/auth/login', 
                 { email, password }
@@ -46,7 +41,21 @@ export const useAuthStore = defineStore('AuthStore', () => {
             setToken(tokenUser);
             setUser(userData);
 
-            toast.success('Login successful!');
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "success",
+                title: "Login berhasil!"
+            });
 
             if (userData.role.nama_role === 'Peserta') {
                 router.push({ name: 'Home' });
@@ -54,9 +63,21 @@ export const useAuthStore = defineStore('AuthStore', () => {
                 router.push({ name: 'Beranda' });
             }
         } catch (error) {
-            isError.value = true;
-            errorMsg.value = "Invalid Login";
-            toast.error('Login failed. Please try again!');
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "error",
+                title: error.response.data.message
+            });
         }
     };
 
@@ -94,7 +115,21 @@ export const useAuthStore = defineStore('AuthStore', () => {
             token.value = null;
             user.value = null;
 
-            toast.success('Logout successfull!');
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "success",
+                title: "Logout berhasil!"
+            });
             isLogout.value = false;
 
             router.push({ name: 'Login' });
@@ -105,8 +140,6 @@ export const useAuthStore = defineStore('AuthStore', () => {
         token,
         user,
         loginUser,
-        isError,
-        errorMsg,
         getMe,
         logoutUser,
         setToken,

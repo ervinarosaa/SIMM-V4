@@ -15,6 +15,7 @@ use App\Http\Controllers\API\{
     OptionController,
     ExportController,
     DashboardController,
+    PenandatanganController
 };
 
 /*
@@ -68,6 +69,9 @@ Route::prefix('v1')->group(function () {
     Route::get('kepala-bagian', [KepalaBagianController::class, 'index'])->middleware('auth:api');
     Route::post('kepala-bagian', [KepalaBagianController::class, 'store'])->middleware('auth:api');
     Route::delete('kepala-bagian/{id}', [KepalaBagianController::class, 'destroy'])->middleware('auth:api');
+
+    Route::get('penandatangan', [PenandatanganController::class, 'index'])->middleware('auth:api');
+    Route::post('penandatangan', [PenandatanganController::class, 'store'])->middleware('auth:api');
 
     Route::prefix('dashboard')->group(function () {
         Route::get('scorecard', [DashboardController::class, 'dahboardAdmin']);

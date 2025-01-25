@@ -14,12 +14,11 @@ return new class extends Migration
         Schema::create('sertifikat', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nomor_sertifikat');
+            $table->string('tanggal_sertifikat');
             $table->uuid('id_peserta');
             $table->foreign('id_peserta')->references('id')->on('peserta')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('nama_penandatangan');
-            $table->string('nip_penandatangan');
-            $table->string('jabatan_penandatangan');
-            $table->string('tanggal_penandatangan');
+            $table->uuid('id_penandatangan');
+            $table->foreign('id_penandatangan')->references('id')->on('penandatangan')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

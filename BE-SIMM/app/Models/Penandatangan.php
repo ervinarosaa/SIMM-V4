@@ -6,26 +6,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
-class Sertifikat extends Model
+class Penandatangan extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $table = "sertifikat";
+    protected $table = "penandatangan";
 
     protected $fillable = [
-        "nomor_sertifikat",
-        "id_peserta",
-        "tanggal_sertifikat",
-        "id_penandatangan",
+        "nama_penandatangan",
+        "nip_penandatangan",
+        "jabatan_penandatangan",
     ];
 
     public function peserta()
     {
         return $this->belongsTo(Peserta::class, 'id_peserta');
-    }
-
-    public function penandatangan()
-    {
-        return $this->belongsTo(Penandatangan::class, 'id_penandatangan');
     }
 }

@@ -142,10 +142,10 @@
                     </td>
                     <td style="text-align: left; padding-left: 70px;">
                         <div class="signature">
-                            Surabaya, {{ \Carbon\Carbon::parse($sertifikat->tanggal_penandatangan)->locale('id')->isoFormat('D MMMM YYYY') }}<br>
-                            {{ $sertifikat->jabatan_penandatangan }},<br><br><br><br><br>
-                            <div class="signature-name">{{ $sertifikat->nama_penandatangan }}</div>
-                            <div>NIP. {{ $sertifikat->nip_penandatangan }}</div>
+                            Surabaya, {{ \Carbon\Carbon::parse($sertifikat->tanggal_sertifikat)->locale('id')->isoFormat('D MMMM YYYY') }}<br>
+                            {{ $sertifikat->penandatangan->jabatan_penandatangan }},<br><br><br><br><br>
+                            <div class="signature-name">{{ $sertifikat->penandatangan->nama_penandatangan }}</div>
+                            <div>NIP. {{ $sertifikat->penandatangan->nip_penandatangan }}</div>
                         </div>
                     </td>
                 </tr>

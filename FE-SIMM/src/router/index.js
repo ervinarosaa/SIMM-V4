@@ -20,6 +20,7 @@ import EditArsipDataMagang from '@/views/Arsip Data Magang/EditArsipDataMagangVi
 import AdministrasiView from '@/views/Administrasi/AdministrasiView.vue';
 import HomeView from '@/views/HomeView.vue';
 import ResetPasswordView from '@/views/ResetPasswordView.vue';
+import SertifikatForm from '@/views/Arsip Data Magang/SertifikatForm.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -176,6 +177,16 @@ const router = createRouter({
           component: AdministrasiView,
           meta: { 
             rolesAllowed: ['Peserta'], 
+            requiresAuth: true 
+          },
+        },
+        {
+          path: 'sertifikat',
+          name: 'Sertifikat',
+          component: SertifikatForm,
+          props: true,
+          meta: { 
+            rolesAllowed: ['Admin'], 
             requiresAuth: true 
           },
         },

@@ -1,5 +1,8 @@
 <template>
     <div class="mt-5 mx-5 lg:ml-10">
+        <!-- Loading Alert -->
+        <LoadingForm :show="isLoading" />
+
         <h1 class="text-2xl lg:text-3xl font-bold text-center mb-4 pb-4">Administrasi Magang</h1>
 
         <div class="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 sm:gap-3 md:gap-4 lg:gap-4">
@@ -176,6 +179,7 @@ import DialogAdministrasi from '@/views/Administrasi/DialogAdministrasi.vue';
 import DeleteConfirm from '@/components/Alerts/DeleteConfirm.vue'; 
 import SuccessAlert from '@/components/Alerts/SuccessAlert.vue';
 import FailedAlert from '@/components/Alerts/FailedAlert.vue';
+import LoadingForm from '@/components/Alerts/LoadingForm.vue';
 
 // State untuk mengontrol alert
 const showDeleteDialog = ref(false);
@@ -184,6 +188,7 @@ const isSuccess = ref(false);
 const isFailed = ref(false);
 const successMessage = ref('');
 const failedMessage = ref('');
+const isLoading = ref(false);
 
 const AuthStore = useAuthStore();
 const loading = ref(false);
@@ -235,6 +240,8 @@ const handleFileUpload = async (event) => {
     }
 
     try {
+        isLoading.value = true; // Tampilkan loading
+
         const formData = new FormData();
         formData.append("file", file);
         formData.append("jenis_dokumen", jenis_dokumen.value);
@@ -254,6 +261,8 @@ const handleFileUpload = async (event) => {
         console.error('Failed to save document:', error);
         isFailed.value = true;
         failedMessage.value = 'Terjadi kesalahan saat menyimpan dokumen. Silahkan coba lagi!';
+    } finally {
+        isLoading.value = false; // Sembunyikan loading
     }
 };
 

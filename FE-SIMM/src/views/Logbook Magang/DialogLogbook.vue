@@ -1,5 +1,8 @@
 <template>
     <div>
+        <!-- Loading Alert -->
+        <LoadingForm :show="isLoading" />
+
         <p class="font-bold text-2xl mb-1">{{ editMode ? 'Edit ' : 'Tambah' }} Logbook Magang</p>
         <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" @click="handleClose">✕</button>
         <hr class="pb-3">
@@ -71,6 +74,7 @@ import { customAPI } from '@/api';
 import { useAuthStore } from '@/stores/AuthStore';
 import SuccessAlert from '@/components/Alerts/SuccessAlert.vue';
 import FailedAlert from '@/components/Alerts/FailedAlert.vue';
+import LoadingForm from '@/components/Alerts/LoadingForm.vue';
 
 const AuthStore = useAuthStore();
 const emit = defineEmits(["closeModal", "saved"]);
@@ -134,6 +138,7 @@ const resetForm = () => {
 };
 
 // State untuk mengontrol alert
+const isLoading = ref(false);
 const isSuccess = ref(false);
 const isFailed = ref(false);
 const successMessage = ref('');
@@ -141,6 +146,8 @@ const failedMessage = ref('');
 
 const handleSubmit = async () => {
     try {
+        isLoading.value = true; // Tampilkan loading
+
         const formData = new FormData();
         formData.append("tanggal_logbook", capitalizeWords(logbookData.tanggal_logbook));
         formData.append("title", logbookData.title);
@@ -182,6 +189,8 @@ const handleSubmit = async () => {
         console.error('Failed to save logbook:', error);
         isFailed.value = true;
         failedMessage.value = 'Gagal menyimpan data. Silahkan coba lagi!';
+    } finally {
+        isLoading.value = false; // Sembunyikan loading
     }
 };
 

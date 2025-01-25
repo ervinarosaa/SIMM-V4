@@ -28,13 +28,12 @@
             </div>
             
             <div class="flex flex-col md:flex-row lg:flex-row gap-2 lg:items-center">
-                <!-- Dropdown Filter -->
-                <select v-model="selectedFilter" class="select select-sm select-bordered h-[33px]  lg:w-full" @change="applyFilter">
-                    <option value="">Semua</option>
+                <!-- Dropdown Filter Tingkat Pendidikan -->
+                <select v-model="selectedFilter" class="select select-sm select-bordered h-[33px] w-full" @change="applyFilter">
+                    <option value="">Tingkat Pendidikan</option>
                     <option value="Perguruan Tinggi">Perguruan Tinggi</option>
                     <option value="Sekolah Kejuruan">Sekolah Kejuruan</option>
                 </select>
-
                 <!-- Search -->
                 <label class="input input-bordered flex items-center justify-between h-[33px]  lg:w-full">
                     <input
@@ -46,8 +45,20 @@
                     <span class="pi pi-search"></span>
                 </label>
             </div>
-            
-        </div>
+
+            <!-- Dropdown Multi-Select Dokumen -->
+            <div class="relative w-full sm:w-auto md:w-[600px]">
+                <div @click="toggleDropdown" class="select select-sm select-bordered h-auto w-full flex items-center justify-between">
+                    <span>{{ selectedDokumenFilter.length > 0 ? selectedDokumenFilter.join(', ') : 'Pilih Dokumen' }}</span>
+                </div>
+                <div v-if="isDropdownOpen" class="absolute z-10 bg-white shadow-lg border w-full mt-1 p-2 rounded-md">
+                    <label v-for="option in dokumenOptions" :key="option" class="flex items-center gap-2 p-1 hover:bg-gray-100 rounded-md">
+                        <input type="checkbox" v-model="selectedDokumenFilter" :value="option" />
+                        {{ option }}
+                    </label>
+                </div>
+            </div>
+        </div>        
 
         <div v-if="loading === true" class="my-4 w-[340px] sm:w-auto md:w-[700px] lg:w-full ">
             <Loading :all="true"/>
@@ -57,8 +68,12 @@
                 class="card bg-base-200 border border-slate-300 shadow-lg w-[340px] sm:w-auto md:w-[700px] lg:w-full overflow-x-auto"
                 @click="handleCardClick(peserta.id)"
             >
-                <div class="flex h-[180px] lg:h-[140px] items-center p-2">
-                    <div class="w-24 aspect-[3/4] rounded-xl overflow-hidden shrink-0">
+                <div class="flex h-min-[160px] h-auto items-center p-2">
+                    <div class="w-32 aspect-[3/4] rounded-xl overflow-hidden shrink-0" v-if="props.arsipMode">
+                        <img v-if="peserta.foto_profil != null" :src="peserta.foto_profil" class="rounded-xl w-full h-full object-cover" />
+                        <img v-else :src="profilDefault" class="rounded-xl w-full h-full object-cover" />
+                    </div>
+                    <div class="w-24 aspect-[3/4] rounded-xl overflow-hidden shrink-0" v-else>
                         <img v-if="peserta.foto_profil != null" :src="peserta.foto_profil" class="rounded-xl w-full h-full object-cover" />
                         <img v-else :src="profilDefault" class="rounded-xl w-full h-full object-cover" />
                     </div>
@@ -107,13 +122,18 @@
                                 <div class="tooltip tooltip-bottom" data-tip="Cetak Sertifikat"  
                                     v-if="props.arsipMode && peserta.status.nama_status !== 'Batal' 
                                         && (peserta.dokumen.some(doc => doc.jenis_dokumen === 'Laporan Magang') &&
-                                        peserta.dokumen.some(doc => doc.jenis_dokumen === 'Lembar Penilaian'))">
+                                        peserta.dokumen.some(doc => doc.jenis_dokumen === 'Lembar Penilaian'))"
+                                >
                                     <!-- Cetak Sertifikat -->
-                                    <button
-                                        @click="openModalSertifikat(peserta)" 
-                                        class="btn btn-xs btn-error shadow-lg">
+                                    <RouterLink 
+                                        :to="{ 
+                                            name: 'Sertifikat',
+                                            query: { peserta: JSON.stringify(peserta) } 
+                                        }"
+                                        class="btn btn-xs btn-accent shadow-lg" 
+                                    >
                                         <span class="pi pi-file-export"></span>
-                                    </button>
+                                    </RouterLink>
                                 </div>
                                 
                                 <div class="tooltip tooltip-bottom" data-tip="Kirim Email">
@@ -124,12 +144,6 @@
                                         class="btn btn-xs btn-active btn-default">
                                         <span class="pi pi-upload"></span>
                                     </button>
-                                </div>
-                                
-                                <div class="modal" :class="{ 'modal-open': showModalSertifikat }">
-                                    <div class="modal-box">
-                                        <DialogSertifikat @closeModal="closeModalSertifikat"  :peserta="selectedPeserta" @sertifikatSaved="handleSavedSertifikat" />
-                                    </div>
                                 </div>
 
                                 <div class="modal" :class="{ 'modal-open': showModalSend }">
@@ -143,7 +157,7 @@
                             <table class="min-w-[600px]">
                                 <tbody>
                                     <tr>
-                                        <td class="font-semibold w-[160px]">Institusi Pendidikan</td>
+                                        <td class="font-semibold w-[190px]">Institusi Pendidikan</td>
                                         <td>:</td>
                                         <td>{{ peserta.institusi?.nama_institusi }}</td>
                                     </tr>
@@ -156,6 +170,16 @@
                                         <td class="font-semibold w-[160px]">Periode Magang</td>
                                         <td>:</td>
                                         <td>{{ peserta.tanggal_mulai }} s/d {{ peserta.tanggal_selesai }}</td>
+                                    </tr>
+                                    <tr v-if="props.arsipMode && peserta.status.nama_status !== 'Batal'">
+                                        <td class="font-semibold w-[160px]">Status Dokumen Admin</td>
+                                        <td>:</td>
+                                        <td>{{ peserta.adminStatus }}</td>
+                                    </tr>
+                                    <tr v-if="props.arsipMode && peserta.status.nama_status !== 'Batal'">
+                                        <td class="font-semibold w-[160px]">Status Dokumen Peserta</td>
+                                        <td>:</td>
+                                        <td>{{ peserta.pesertaStatus }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -194,7 +218,6 @@ import { customAPI } from '@/api';
 import profilDefault from '@/assets/profil-default.png';
 import DialogSendEmail from '@/components/Dialog/DialogSendEmail.vue';
 import DialogGeneralExport from '@/components/Dialog/DialogExportDataMagang.vue';
-import DialogSertifikat from '@/views/Arsip Data Magang/DialogSertifikat.vue';
 import Loading from '@/components/layouts/Loading.vue';
 import SuccessAlert from '@/components/Alerts/SuccessAlert.vue';
 
@@ -208,7 +231,9 @@ const loading = ref(false);
 const allPeserta = ref([]);
 const searchQuery = ref('');
 const selectedFilter = ref('');
+const selectedDokumenFilter = ref([]);
 const filteredPeserta = ref([]);
+const isDropdownOpen = ref(false);
 
 const props = defineProps({
     arsipMode:{
@@ -217,6 +242,36 @@ const props = defineProps({
     }
 });
 
+// Dokumen yang dibagi antara admin dan peserta
+const adminDokumen = ['Surat Balasan', 'Sertifikat'];
+const pesertaDokumen = ['Laporan Magang', 'Lembar Penilaian'];
+
+// Fungsi untuk mengecek status dokumen admin
+const checkStatusAdmin = (dokumen) => {
+    const dokumenAda = dokumen.map(item => item.jenis_dokumen); 
+    const dokumenKurang = adminDokumen.filter(item => !dokumenAda.includes(item));
+
+    if (dokumenKurang.length === 1) {
+        return `${dokumenKurang[0]} belum diproses`;
+    } else if (dokumenKurang.length === 2) {
+        return `${dokumenKurang[0]} dan ${dokumenKurang[1]} belum diproses`;
+    }
+    return 'Semua dokumen admin lengkap';
+};
+
+// Fungsi untuk mengecek status dokumen peserta
+const checkStatusPeserta = (dokumen) => {
+    const dokumenAda = dokumen.map(item => item.jenis_dokumen); 
+    const dokumenKurang = pesertaDokumen.filter(item => !dokumenAda.includes(item));
+
+    if (dokumenKurang.length === 1) {
+        return `${dokumenKurang[0]} belum diunggah`;
+    } else if (dokumenKurang.length === 2) {
+        return `${dokumenKurang[0]} dan ${dokumenKurang[1]} belum diunggah`;
+    }
+    return 'Semua dokumen peserta lengkap';
+};
+
 const FetchPeserta = async () => {
     if (props.arsipMode) {
         try {
@@ -224,7 +279,15 @@ const FetchPeserta = async () => {
             const { data } = await customAPI.get('/peserta-arsip', {
                 headers: { Authorization: `Bearer ${AuthStore.token}` }
             });
-            allPeserta.value = data.data; 
+            allPeserta.value = data.data.map(peserta => {
+                const adminStatus = checkStatusAdmin(peserta.dokumen);
+                const pesertaStatus = checkStatusPeserta(peserta.dokumen);
+                return {
+                    ...peserta,
+                    adminStatus,  // Status untuk admin
+                    pesertaStatus // Status untuk peserta
+                };
+            });
         } catch (error) {
             console.error('Error fetching data:', error);
         } finally {
@@ -245,6 +308,12 @@ const FetchPeserta = async () => {
     };
 };
     
+const dokumenOptions = ['Surat Balasan', 'Laporan Magang', 'Lembar Penilaian', 'Sertifikat'];
+
+const toggleDropdown = () => {
+    isDropdownOpen.value = !isDropdownOpen.value;
+};
+
 const applyFilter = async () => {
     let filteredData = allPeserta.value;
 
@@ -252,6 +321,13 @@ const applyFilter = async () => {
         filteredData = filteredData.filter(p => p.institusi.tingkat_pendidikan === 'Perguruan Tinggi');
     } else if (selectedFilter.value === 'Sekolah Kejuruan') {
         filteredData = filteredData.filter(p => p.institusi.tingkat_pendidikan === 'Sekolah Kejuruan');
+    }
+
+    // Filter berdasarkan dokumen yang dipilih dalam multiselect
+    if (selectedDokumenFilter.value && selectedDokumenFilter.value.length > 0) {
+        filteredData = filteredData.filter(p =>
+            !p.dokumen.some(dokumen => selectedDokumenFilter.value.includes(dokumen.jenis_dokumen))
+        );
     }
 
     // Filter berdasarkan searchQuery
@@ -268,7 +344,7 @@ const applyFilter = async () => {
     filteredPeserta.value = filteredPeserta.value.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 };
 
-watch([selectedFilter, searchQuery], applyFilter);
+watch([selectedFilter, selectedDokumenFilter, searchQuery], applyFilter);
 
 const selectedPeserta = ref(null);
 
@@ -290,27 +366,6 @@ const handleSavedExport = () => {
     FetchPeserta().then(applyFilter);
 };
 // End Modal Export
-
-// Start Modal Sertifikat
-const showModalSertifikat = ref(false);
-
-const openModalSertifikat = (peserta) => {
-    selectedPeserta.value = peserta;
-    showModalSertifikat.value = true;
-};
-
-const closeModalSertifikat = () => {
-    showModalSertifikat.value = false;
-    selectedPeserta.value = null;
-};
-
-const handleSavedSertifikat = () => {
-    isSuccess.value = true;
-    successMessage.value = 'Sertifikat berhasil diunduh!';
-    closeModalSertifikat();
-    FetchPeserta().then(applyFilter);
-};
-// End Modal Sertifikat
 
 // Start Modal Send Email
 const showModalSend = ref(false);

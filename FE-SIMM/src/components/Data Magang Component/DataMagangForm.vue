@@ -1,5 +1,8 @@
 <template>
     <div class="mt-5 mx-2 lg:ml-10 border border-slate-200 shadow-xl rounded-lg">
+        <!-- Loading Alert -->
+        <LoadingForm :show="isLoading" />
+
         <div class="flex items-center bg-base-300 m-2 p-2 rounded-lg font-bold">
             <span v-if="props.title === 'Tambah'" class="pi pi-user-plus px-2 text-xl"></span>
             <span v-else class="pi pi-user-edit px-2 text-xl"></span>
@@ -265,8 +268,10 @@ import { format } from 'date-fns';
 import profilDefault from '@/assets/profil-default.png';
 import SuccessAlert from '@/components/Alerts/SuccessAlert.vue';
 import FailedAlert from '@/components/Alerts/FailedAlert.vue';
+import LoadingForm from '@/components/Alerts/LoadingForm.vue';
 
 // State untuk mengontrol alert
+const isLoading = ref(false);
 const isSuccess = ref(false);
 const isFailed = ref(false);
 const successMessage = ref('');
@@ -474,6 +479,8 @@ const capitalizeWords = (text) => {
 
 const handleSubmit = async () => {
     try {
+        isLoading.value = true; // Tampilkan loading
+
         const formData = new FormData();
         formData.append("tanggal_mulai", formatDate(peserta.tanggal_mulai));
         formData.append("tanggal_selesai", formatDate(peserta.tanggal_selesai));
@@ -524,7 +531,9 @@ const handleSubmit = async () => {
     } catch (error) {
         console.error('Failed to submit data:', error);
         isFailed.value = true;
-        failedMessage.value = 'Gagal menyimpan data. Silahkan coba lagi!';
+        failedMessage.value = error.response.data.message || 'Gagal menyimpan data. Silahkan coba lagi!';
+    } finally {
+        isLoading.value = false; // Sembunyikan loading
     }
 };
 

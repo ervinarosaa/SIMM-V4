@@ -102,9 +102,11 @@ class PresensiController extends Controller
         $deltaLat = $lat2Rad - $lat1Rad;
         $deltaLon = $lon2Rad - $lon1Rad;
 
+        // menghitung jarak sudut antara dua titik
         $a = sin($deltaLat / 2) * sin($deltaLat / 2) +
              cos($lat1Rad) * cos($lat2Rad) *
              sin($deltaLon / 2) * sin($deltaLon / 2);
+        // menghitung jarak angular dalam radian
         $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
 
         // Jarak dalam meter

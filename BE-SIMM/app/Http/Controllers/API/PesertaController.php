@@ -40,6 +40,28 @@ class PesertaController extends Controller
     public function pesertaAktif()
     {
         $statusAktif = Status::where("nama_status", "Aktif")->first();
+        $statusSelesai = Status::where("nama_status", "Selesai")->first();
+
+        // Ambil peserta yang statusnya akan diperbarui
+        $updateStatus = Peserta::where("id_status", $statusAktif->id)
+            ->whereDate("tanggal_selesai", "<=", now())
+            ->get();
+
+        foreach ($updateStatus as $peserta) {
+            // Update status peserta
+            $peserta->id_status = $statusSelesai->id;
+            $peserta->save();
+
+            // Kurangi kuota lokasi
+            if ($peserta->id_lokasi) {
+                $lokasi = Lokasi::find($peserta->id_lokasi);
+                if ($lokasi && $lokasi->kuota_terisi > 0) {
+                    $lokasi->kuota_terisi -= 1;
+                    $lokasi->save();
+                }
+            }
+        }
+
         $peserta = Peserta::with("lokasi", "institusi", "status")->where("id_status", $statusAktif->id)->get();
         return response()->json([
             "message" => "Lihat semua peserta aktif",
@@ -49,8 +71,29 @@ class PesertaController extends Controller
 
     public function arsipPeserta()
     {
-        $statusAktif = Status::where("nama_status", "Aktif")->first();
-        $peserta = Peserta::with(["lokasi", "institusi", "sertifikat", "nilai", "status", "dokumen"])
+        $statusAktif = Status::where("nama_status", "Aktif")->first();$statusSelesai = Status::where("nama_status", "Selesai")->first();
+
+        // Ambil peserta yang statusnya akan diperbarui
+        $updateStatus = Peserta::where("id_status", $statusAktif->id)
+            ->whereDate("tanggal_selesai", "<=", now())
+            ->get();
+
+        foreach ($updateStatus as $peserta) {
+            // Update status peserta
+            $peserta->id_status = $statusSelesai->id;
+            $peserta->save();
+
+            // Kurangi kuota lokasi
+            if ($peserta->id_lokasi) {
+                $lokasi = Lokasi::find($peserta->id_lokasi);
+                if ($lokasi && $lokasi->kuota_terisi > 0) {
+                    $lokasi->kuota_terisi -= 1;
+                    $lokasi->save();
+                }
+            }
+        }
+
+        $peserta = Peserta::with(["lokasi", "institusi", "sertifikat.penandatangan", "nilai", "status", "dokumen"])
             ->where("id_status", "!=", $statusAktif->id)->get();
         return response()->json([
             "message" => "Lihat semua arsip peserta",
@@ -64,6 +107,15 @@ class PesertaController extends Controller
     public function store(PesertaRequest $request)
     {
         $data = $request->validated();
+
+        // Cari user berdasarkan email
+        $checkEmail = User::where("email", $request["email"])->first();
+
+        if ($checkEmail) {
+            return response()->json([
+                "message" => "Email sudah terdaftar! Silahkan buat dengan email lain"
+            ], 404);
+        }
 
         // Jika file gambar diinput
         if ($request->hasFile("foto_profil")){
@@ -108,7 +160,7 @@ class PesertaController extends Controller
     {
         $peserta = Peserta::with([
             "user", "lokasi", "status", "institusi", "nilai",
-            "sertifikat", "logbook.lokasi", "presensi.lokasi", "dokumen" 
+            "sertifikat.penandatangan", "logbook.lokasi", "presensi.lokasi", "dokumen" 
         ])->find($id);
 
         if(!$peserta){

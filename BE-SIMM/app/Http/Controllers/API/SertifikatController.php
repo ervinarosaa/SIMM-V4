@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Sertifikat;
 use App\Models\Peserta;
+use App\Models\Penandatangan;
 use App\Http\Requests\SertifikatRequest;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -44,6 +45,15 @@ class SertifikatController extends Controller
             ], 404);
         }
 
+        // Find penandatangan
+        $penandatangan = Penandatangan::find($data["id_penandatangan"]);
+
+        if (!$penandatangan) {
+            return response()->json([
+                "message" => "Penandatangan tidak ditemukan!",
+            ], 404);
+        }
+
         // Create Sertifikat
         $sertifikat = Sertifikat::updateOrCreate(
             [
@@ -52,10 +62,8 @@ class SertifikatController extends Controller
             [
                 "nomor_sertifikat" => $data["nomor_sertifikat"],
                 "id_peserta" => $data["id_peserta"], 
-                "nama_penandatangan" => $data["nama_penandatangan"], 
-                "nip_penandatangan" => $data["nip_penandatangan"], 
-                "jabatan_penandatangan" => $data["jabatan_penandatangan"], 
-                "tanggal_penandatangan" => $data["tanggal_penandatangan"], 
+                "id_penandatangan" => $data["id_penandatangan"], 
+                "tanggal_sertifikat" => $data["tanggal_sertifikat"], 
             ]
         );
 
@@ -77,7 +85,7 @@ class SertifikatController extends Controller
             "lokasi",
             "institusi",
             "nilai",
-            "sertifikat",
+            "sertifikat.penandatangan",
         ])->find($id);
     
         // Ambil data sertifikat

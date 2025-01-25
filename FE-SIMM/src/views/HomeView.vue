@@ -98,12 +98,38 @@
                 </div>
 
                 <div v-else>
-                    <DoughnutChart v-if="labels_administrasi.length && total_administrasi.length"
-                        title="Administrasi Magang"
-                        :labels_data="labels_administrasi"
-                        :total_peserta="total_administrasi"
-                        label_name="Total Dokumen"
-                    />
+                    <div class="stats shadow border h-[380px] w-[340px] lg:w-[390px] justify-center">
+                        <div class="stat items-start">
+                            <div class="stat-title font-bold text-xl text-center">Status Administrasi</div>
+                            <hr>
+                            <table class="table mb-16">
+                                <!-- head -->
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Name</th>
+                                        <th class="text-center items-center justify-center">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(status, index) in statusAllDokumen" :key="status.jenis">
+                                        <th>{{ index + 1 }}</th>
+                                        <td>{{ status.jenis }}</td>
+                                        <div class="text-center items-center justify-center mt-2">
+                                            <td v-if="status.status_dokumen === 'Tersedia' || status.status_dokumen === 'Telah Diunggah'"
+                                                class="text-xs badge badge-success">
+                                                {{ status.status_dokumen }}
+                                            </td>
+                                            <td v-else
+                                                class="text-xs badge badge-error">
+                                                {{ status.status_dokumen }}
+                                            </td>
+                                        </div>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -181,23 +207,57 @@ const FetchLogbook = async () => {
     }
 };
 
-const administrasiData = ref([]);
-const labels_administrasi = ref([]);
-const total_administrasi = ref([]);
-const FetchAdministrasi = async () => {
+const adminDokumen = [
+    { jenis: 'Surat Balasan' },
+    { jenis: 'Sertifikat' }
+];
+
+const pesertaDokumen = [
+    { jenis: 'Laporan Magang' },
+    { jenis: 'Lembar Penilaian' }
+];
+
+// Fungsi untuk mengecek status dokumen admin
+const checkStatusAdmin = (dokumen) => {
+    const dokumenAda = dokumen.map(item => item.jenis_dokumen); 
+
+    return adminDokumen.map(item => ({
+        jenis: item.jenis,
+        status_dokumen: dokumenAda.includes(item.jenis) ? "Tersedia" : "Belum Tersedia"
+    }));
+};
+
+// Fungsi untuk mengecek status dokumen peserta
+const checkStatusPeserta = (dokumen) => {
+    const dokumenAda = dokumen.map(item => item.jenis_dokumen); 
+
+    return pesertaDokumen.map(item => ({
+        jenis: item.jenis,
+        status_dokumen: dokumenAda.includes(item.jenis) ? "Telah Diunggah" : "Belum Diunggah"
+    }));
+};
+
+// State untuk menyimpan semua dokumen
+const allDokumen = ref([]);
+const statusAllDokumen = ref([]);
+
+// Fungsi untuk mengambil data dokumen peserta
+const FetchDokumen = async () => {
     try {
-        loading.value=true;
-        const { data: administrasiResponse } = await customAPI.get(`/dashboard/administrasi-peserta/${peserta_id.value}`, {
+        const { data } = await customAPI.get(`/dokumen/peserta/${peserta_id.value}`, {
             headers: { Authorization: `Bearer ${AuthStore.token}` }
         });
 
-        administrasiData.value = administrasiResponse.data;
-        labels_administrasi.value = administrasiResponse.data.map(item => item.name);
-        total_administrasi.value = administrasiResponse.data.map(item => item.total_dokumen);
+        allDokumen.value = data.data;
+
+        // Cek status dokumen setelah data diambil
+        const adminStatus = checkStatusAdmin(allDokumen.value);
+        const pesertaStatus = checkStatusPeserta(allDokumen.value);
+        statusAllDokumen.value = [...adminStatus, ...pesertaStatus];
+        console.log(statusAllDokumen);
+        
     } catch (error) {
-        console.error('Error fetching data:', error);
-    } finally {
-        loading.value = false;
+        console.error('Error fetching data dokumen:', error);
     }
 };
 
@@ -205,6 +265,6 @@ onMounted(async () => {
     await getPesertaById();
     FetchPresensi();
     FetchLogbook();
-    FetchAdministrasi();
+    FetchDokumen();
 })
 </script>

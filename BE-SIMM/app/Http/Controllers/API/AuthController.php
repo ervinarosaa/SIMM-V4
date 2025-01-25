@@ -65,9 +65,20 @@ class AuthController extends Controller
     public function login(Request $request) {
         $credentials = request(["email", "password"]);
 
-        if (!$token = auth()->attempt($credentials)) {
+        // Cari user berdasarkan email
+        $user = User::where("email", $credentials["email"])->first();
+
+        if (!$user) {
+            // Jika user tidak ditemukan berdasarkan email
             return response()->json([
-                "message" => "User Invalid"
+                "message" => "Akun tidak ditemukan"
+            ], 404);
+        }
+
+        // Cek password
+        if (!auth()->attempt($credentials)) {
+            return response()->json([
+                "message" => "Password salah"
             ], 401);
         }
 

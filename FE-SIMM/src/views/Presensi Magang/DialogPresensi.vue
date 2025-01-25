@@ -1,5 +1,8 @@
 <template>
     <div>
+        <!-- Loading Alert -->
+        <LoadingForm :show="isLoading" />
+
         <p class="font-bold text-2xl mb-1">Tambah Presensi Magang</p>
         <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" @click="handleClose">✕</button>
         <hr class="pb-3">
@@ -97,6 +100,7 @@ import { customAPI } from '@/api';
 import { useAuthStore } from '@/stores/AuthStore';
 import FailedAlert from '@/components/Alerts/FailedAlert.vue';
 import WarningAlert from '@/components/Alerts/WarningAlert.vue';
+import LoadingForm from '@/components/Alerts/LoadingForm.vue';
 
 const AuthStore = useAuthStore();
 const emit = defineEmits(["closeModal", "saved"]);
@@ -183,6 +187,7 @@ const resetForm = () => {
 };
 
 // State untuk mengontrol alert
+const isLoading = ref(false);
 const isFailed = ref(false);
 const failedMessage = ref('');
 const isWarning = ref(false);
@@ -208,14 +213,16 @@ const checkDuplicatePresensi = async (idPeserta, tanggalPresensi) => {
 };
 
 const handleSubmit = async () => {
-    try {
-        const isDuplicate = await checkDuplicatePresensi(id_peserta.value, tanggal_presensi.value);
+    const isDuplicate = await checkDuplicatePresensi(id_peserta.value, tanggal_presensi.value);
 
-        if (isDuplicate) {
-            isWarning.value = true;
-            warningMessage.value = "Data presensi sudah ada!";
-            return;
-        }
+    if (isDuplicate) {
+        isWarning.value = true;
+        warningMessage.value = "Data presensi sudah ada!";
+        return;
+    }
+
+    try {
+        isLoading.value = true; // Tampilkan loading
 
         await getLocation();
 
@@ -259,6 +266,8 @@ const handleSubmit = async () => {
         console.error('Terjadi kesalahan:', error);
         isFailed.value = true;
         failedMessage.value = error.response.data.message || 'Gagal menyimpan data. Silahkan coba lagi!';
+    } finally {
+        isLoading.value = false; // Sembunyikan loading
     }
 };
 
