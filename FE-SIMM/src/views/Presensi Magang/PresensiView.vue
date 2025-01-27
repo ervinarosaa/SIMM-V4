@@ -3,7 +3,9 @@
         <h1 class="text-2xl lg:text-3xl font-bold text-center mb-4 pb-4">Presensi Magang</h1>
 
         <div class="flex flex-col lg:flex-row gap-2 lg:items-center">
-            <button class="btn btn-sm btn-primary text-white" @click="openModalAdd()" v-if="isPesertaAktif === 'Aktif'">
+            <button class="btn btn-sm btn-primary text-white" @click="openModalAdd()" 
+                v-if="(AuthStore.user?.role?.nama_role === 'Peserta' && isPesertaAktif === 'Aktif') || AuthStore.user?.role?.nama_role === 'Admin'"
+            >
                 <span class="pi pi-id-card"></span> Tambah
             </button>
 
@@ -37,16 +39,17 @@
                     <ExportFromPeserta @closeModal="closeModalPeserta" :logbookMode="false" :peserta="selectedPeserta" @saved="handleSavedPeserta" />
                 </div>
             </div>
+            
+            <!-- Date Filter -->
+            <label class="input input-bordered flex items-center h-[33px] lg:w-auto">
+                <input type="date" v-model="selectedDate" class="input input-sm w-full lg:w-auto" />
+            </label>
+
             <!-- Search -->
             <label class="input input-bordered flex items-center h-[33px] lg:w-full" 
                 v-if="AuthStore.user.role?.nama_role !== 'Peserta'">
                 <input type="text" v-model="searchQuery" placeholder="Cari Presensi..." class="input input-sm w-full justify-between" />
                 <span class="pi pi-search"></span>
-            </label>
-
-            <!-- Date Filter -->
-            <label class="input input-bordered flex items-center h-[33px] lg:w-full">
-                <input type="date" v-model="selectedDate" class="input input-sm w-full" />
             </label>
         </div>
 
@@ -195,7 +198,8 @@ const FetchPresensi = async () => {
             });
 
             peserta.value = pesertaData.user.peserta;
-            isPesertaAktif.value = peserta.status.nama_status;
+            
+            isPesertaAktif.value = pesertaData.user.peserta?.status?.nama_status;
 
             const peserta_id = pesertaData.user.peserta.id;
             const { data } = await customAPI.get(`/presensi/peserta/${peserta_id}`, {

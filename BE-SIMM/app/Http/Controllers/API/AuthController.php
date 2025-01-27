@@ -37,23 +37,22 @@ class AuthController extends Controller
         }
     
         $user = User::with("role")
-            ->when($role->nama_role === "Admin", function($query) {
+            ->when($role->nama_role === "Admin", function ($query) {
                 $query->with("admin");
             })
-            ->when($role->nama_role === "Kepala Bagian", function($query) {
+            ->when($role->nama_role === "Kepala Bagian", function ($query) {
                 $query->with("kepala_bagian");
+            })
+            ->when($role->nama_role === "Peserta", function ($query) {
+                $query->with(["peserta.status"]); // Tambahkan relasi status untuk peserta
             })
             ->where("id", $currentUser->id)
             ->first();
-    
+
         if (!$user) {
             return response()->json([
                 "message" => "Pengguna tidak ditemukan",
             ], 404);
-        }
-
-        if ($role->nama_role === "Peserta") {
-            $peserta = $user->peserta; 
         }
     
         return response()->json([
