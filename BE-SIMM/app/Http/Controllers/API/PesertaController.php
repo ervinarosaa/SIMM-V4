@@ -160,7 +160,7 @@ class PesertaController extends Controller
     {
         $peserta = Peserta::with([
             "user", "lokasi", "status", "institusi", "nilai",
-            "sertifikat.penandatangan", "logbook.lokasi", "presensi.lokasi", "dokumen" 
+            "sertifikat", "logbook.lokasi", "presensi.lokasi", "dokumen" 
         ])->find($id);
 
         if(!$peserta){

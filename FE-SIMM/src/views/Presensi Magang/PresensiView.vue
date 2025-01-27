@@ -195,7 +195,7 @@ const FetchPresensi = async () => {
             });
 
             peserta.value = pesertaData.user.peserta;
-            isPesertaAktif.value = peserta.value.status === "aktif";
+            isPesertaAktif.value = peserta.status.nama_status === "Aktif";
 
             const peserta_id = pesertaData.user.peserta.id;
             const { data } = await customAPI.get(`/presensi/peserta/${peserta_id}`, {
