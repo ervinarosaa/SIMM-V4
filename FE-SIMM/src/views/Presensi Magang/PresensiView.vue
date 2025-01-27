@@ -3,7 +3,7 @@
         <h1 class="text-2xl lg:text-3xl font-bold text-center mb-4 pb-4">Presensi Magang</h1>
 
         <div class="flex flex-col lg:flex-row gap-2 lg:items-center">
-            <button class="btn btn-sm btn-primary text-white" @click="openModalAdd()" v-if="isPesertaAktif">
+            <button class="btn btn-sm btn-primary text-white" @click="openModalAdd()" v-if="isPesertaAktif === 'Aktif'">
                 <span class="pi pi-id-card"></span> Tambah
             </button>
 
@@ -195,7 +195,7 @@ const FetchPresensi = async () => {
             });
 
             peserta.value = pesertaData.user.peserta;
-            isPesertaAktif.value = peserta.status.nama_status === "Aktif";
+            isPesertaAktif.value = peserta.status.nama_status;
 
             const peserta_id = pesertaData.user.peserta.id;
             const { data } = await customAPI.get(`/presensi/peserta/${peserta_id}`, {
