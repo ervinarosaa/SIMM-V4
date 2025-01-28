@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '@/stores/AuthStore';
+import Swal from 'sweetalert2';
 import PublicLayout from '@/Layouts/PublicLayout.vue';
 import BerandaView from '@/views/BerandaView.vue';
 import LoginView from '@/views/LoginView.vue';
@@ -214,8 +215,24 @@ router.beforeEach((to, from, next) => {
 
   // Check requires authentication
   if (to.meta.requiresAuth && !AuthStore.token) {
-    alert("Anda belum login!");
+    Swal.fire({
+      title: "Login Required",
+      text: "You are not logged in!",
+      icon: "warning",
+      confirmButtonText: "OK"
+    });
     return next({ path: '/' });
+  }
+
+  // Check if user is authenticated and trying to access not found page
+  if (!to.matched.length) {
+    Swal.fire({
+      title: "404",
+      text: "Page not found!",
+      icon: "warning",
+      confirmButtonText: "OK"
+    });
+    return next({ path: '/' }); 
   }
 
   // Check authenticated
@@ -229,7 +246,12 @@ router.beforeEach((to, from, next) => {
 
   // Check role
   if (to.meta.rolesAllowed && !to.meta.rolesAllowed.includes(AuthStore.user.role.nama_role)) {
-    alert("You do not have permission to access this page");
+    Swal.fire({
+      title: "Restricted Page",
+      text: "You do not have permission to access this page!",
+      icon: "warning",
+      confirmButtonText: "OK"
+    });
     return next({ path: '/' });
   }
   next();

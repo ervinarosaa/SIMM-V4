@@ -264,6 +264,7 @@ const openModalSertifikat = () => {
 
 const closeModalSertifikat = () => {
     showModalSertifikat.value = false;
+    FetchPenandatangan();
 };
 
 const handleSavedSertifikat = () => {

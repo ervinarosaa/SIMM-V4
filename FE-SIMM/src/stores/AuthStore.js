@@ -2,12 +2,10 @@ import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { useRouter } from 'vue-router';
 import { customAPI } from '@/api';
-import { useToast } from 'vue-toast-notification';
 import Swal from 'sweetalert2';
 
 export const useAuthStore = defineStore('AuthStore', () => {
     const router = useRouter();
-    const toast = useToast();
 
     const safeParse = (item) => {
         try {
