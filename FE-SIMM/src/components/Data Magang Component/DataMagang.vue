@@ -419,11 +419,11 @@ const handleSelesai = async (pesertaId) => {
             headers: { Authorization: `Bearer ${AuthStore.token}` },
         });
 
-        isSuccess.value = true;
-        successMessage.value = 'Data berhasil disimpan!';
-
         await FetchPeserta();
         applyFilter();
+
+        isSuccess.value = true;
+        successMessage.value = 'Data berhasil disimpan!';
     } catch (error) {
         console.error('Failed to submit data:', error);
         isFailed.value = true;
