@@ -62,7 +62,7 @@ class PesertaController extends Controller
             }
         }
 
-        $peserta = Peserta::with("lokasi", "institusi", "status")->where("id_status", $statusAktif->id)->get();
+        $peserta = Peserta::with("lokasi", "institusi", "sertifikat.penandatangan", "nilai", "status", "dokumen")->where("id_status", $statusAktif->id)->get();
         return response()->json([
             "message" => "Lihat semua peserta aktif",
             "data" => $peserta
@@ -240,6 +240,39 @@ class PesertaController extends Controller
         return response()->json([
             "message" => "Peserta dengan ID $id berhasil diperbarui",
         ], 201);
+    }
+
+    /**
+     * Update Status Peserta By Button
+     */
+    public function updateStatusSelesai(Request $request, string $id)
+    {
+        $peserta = Peserta::find($id);
+
+        if (!$peserta) {
+            return response()->json([
+                "message" => "Data peserta tidak ditemukan!",
+            ], 404);
+        }
+
+        $status = Status::where("nama_status", "Selesai")->first();
+
+        if ($peserta->id_status !== $status->id) {
+            $lokasi = Lokasi::find($peserta->id_lokasi);
+
+            if ($lokasi) {
+                $lokasi->kuota_terisi -= 1;
+                $lokasi->save();
+            }
+
+            $peserta->update([
+                "id_status" => $status->id,
+            ]);
+        }
+
+        return response()->json([
+            "message" => "Status peserta dengan ID $id berhasil diperbarui menjadi 'Selesai'.",
+        ], 200);
     }
 
     /**

@@ -1,5 +1,8 @@
 <template>
     <div class="mt-5 mx-5 lg:ml-10">
+        <!-- Loading Alert -->
+        <LoadingForm :show="isLoading" />
+
         <h1 class="text-xl lg:text-3xl font-bold text-center mb-4 pb-4">{{ arsipMode ? 'Arsip Data Magang' : 'Data Peserta Aktif' }}</h1>
         
         <div class="flex flex-col lg:flex-row gap-2 lg:items-center w-[340px] sm:w-auto md:w-[700px] lg:w-full">
@@ -151,6 +154,15 @@
                                         <DialogSendEmail @closeModal="closeModalSend"  :peserta="selectedPeserta" @saved="handleSavedSend" />
                                     </div>
                                 </div>
+
+                                <div class="tooltip tooltip-bottom" data-tip="Selesai" v-if="!$props.arsipMode">
+                                    <!-- Check Selesai -->
+                                    <button
+                                        @click="handleSelesai(peserta.id)" 
+                                        class="btn btn-xs btn-active btn-accent">
+                                        <span class="pi pi-check-circle"></span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <div class="flex gap-2">
@@ -207,6 +219,7 @@
         </div>
         <!-- Success and Failed Alert -->
         <SuccessAlert v-if="isSuccess" :message="successMessage" @alertClosed="isSuccess = false" />
+        <FailedAlert v-if="isFailed" :message="failedMessage" @alertClosed="isFailed = false" />
     </div>
 </template>
 
@@ -220,10 +233,15 @@ import DialogSendEmail from '@/components/Dialog/DialogSendEmail.vue';
 import DialogGeneralExport from '@/components/Dialog/DialogExportDataMagang.vue';
 import Loading from '@/components/layouts/Loading.vue';
 import SuccessAlert from '@/components/Alerts/SuccessAlert.vue';
+import FailedAlert from '@/components/Alerts/FailedAlert.vue';
+import LoadingForm from '@/components/Alerts/LoadingForm.vue';
 
 // State untuk mengontrol alert
+const isLoading = ref(false);
 const isSuccess = ref(false);
+const isFailed = ref(false);
 const successMessage = ref('');
+const failedMessage = ref('');
 
 const AuthStore = useAuthStore();
 const router = useRouter();
@@ -390,6 +408,28 @@ const handleSavedSend = () => {
 const handleCardClick = (pesertaId) => {
     if (AuthStore.user.role.nama_role !== 'Admin') {
         router.push({ name:'DetailDataMagang', params: {id: pesertaId} });
+    }
+}
+
+const handleSelesai = async (pesertaId) => {
+    try {
+        isLoading.value = true; // Tampilkan loading
+        
+        await customAPI.patch(`/peserta/${pesertaId}/selesai`, {}, {
+            headers: { Authorization: `Bearer ${AuthStore.token}` },
+        });
+
+        isSuccess.value = true;
+        successMessage.value = 'Data berhasil disimpan!';
+
+        await FetchPeserta();
+        applyFilter();
+    } catch (error) {
+        console.error('Failed to submit data:', error);
+        isFailed.value = true;
+        failedMessage.value = error.response.data.message || 'Gagal menyimpan data. Silahkan coba lagi!';
+    } finally {
+        isLoading.value = false; // Sembunyikan loading
     }
 }
 
