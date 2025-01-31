@@ -113,12 +113,12 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="(status, index) in statusAllDokumen" :key="status.jenis">
-                                        <th>{{ index + 1 }}</th>
-                                        <td>{{ status.jenis }}</td>
-                                        <div class="text-center items-center justify-center mt-2">
-                                            <RouterLink 
-                                                :to="{ name: 'Administrasi' }"
-                                            >
+                                        <RouterLink 
+                                            :to="{ name: 'Administrasi' }"
+                                        >
+                                            <th>{{ index + 1 }}</th>
+                                            <td>{{ status.jenis }}</td>
+                                            <div class="text-center items-center justify-center mt-2">
                                                 <td v-if="status.status_dokumen === 'Tersedia' || status.status_dokumen === 'Telah Diunggah'"
                                                     class="text-xs badge badge-success">
                                                     {{ status.status_dokumen }}
@@ -127,8 +127,8 @@
                                                     class="text-xs badge badge-error">
                                                     {{ status.status_dokumen }}
                                                 </td>
-                                            </RouterLink>
-                                        </div>
+                                            </div>
+                                        </RouterLink>
                                     </tr>
                                 </tbody>
                             </table>
