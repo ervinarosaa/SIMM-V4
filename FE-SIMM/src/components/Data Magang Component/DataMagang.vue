@@ -52,12 +52,12 @@
             <!-- Dropdown Multi-Select Dokumen -->
             <div class="relative w-full sm:w-auto md:w-[600px]">
                 <div @click="toggleDropdown" class="select select-sm select-bordered h-auto w-full flex items-center justify-between">
-                    <span>{{ selectedDokumenFilter.length > 0 ? selectedDokumenFilter.join(', ') : 'Pilih Dokumen' }}</span>
+                    <span>{{ selectedDokumenFilter.length > 0 ? selectedDokumenFilter.join(', ') : 'Dokumen' }}</span>
                 </div>
                 <div v-if="isDropdownOpen" class="absolute z-10 bg-white shadow-lg border w-full mt-1 p-2 rounded-md">
                     <label v-for="option in dokumenOptions" :key="option" class="flex items-center gap-2 p-1 hover:bg-gray-100 rounded-md">
                         <input type="checkbox" v-model="selectedDokumenFilter" :value="option" />
-                        {{ option }}
+                        {{ option }} belum diproses
                     </label>
                 </div>
             </div>
