@@ -91,7 +91,7 @@
         .signature {
             text-align: left;
             font-size: 16px;
-            margin-left: 50px;
+            margin-left: 30px;
         }
         .signature-name {
             font-weight: bold;
@@ -140,7 +140,7 @@
                     <td style="text-align: center;">
                         <img src="{{ $fotoUrl }}" alt="Foto Peserta">
                     </td>
-                    <td style="text-align: left; padding-left: 70px;">
+                    <td style="text-align: left;">
                         <div class="signature">
                             Surabaya, {{ \Carbon\Carbon::parse($sertifikat->tanggal_sertifikat)->locale('id')->isoFormat('D MMMM YYYY') }}<br>
                             {{ $sertifikat->penandatangan->jabatan_penandatangan }},<br><br><br><br><br>

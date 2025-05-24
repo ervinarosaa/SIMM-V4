@@ -15,9 +15,9 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        $userAdmin = User::where('email', 'ervinarosaaulia@gmail.com')->first();
+        $userAdmin = User::where('email', 'ervinarosaaulia.xiipa3@gmail.com')->first();
         Admin::create([
-            'nama_admin' => 'Ervina Rosa Aulia',
+            'nama_admin' => 'Ervina',
             'id_user' => $userAdmin->id,
         ]);
     }
